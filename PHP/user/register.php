@@ -2,12 +2,19 @@
     include '../database.php';
     include '../data/user.php';
 
-    $userName = $_POST["username"];
-    $firstName = $_POST["firstname"];
-    $lastName = $_POST["lastname"];
-    $emailAddress = $_POST["email"];
-    $password = $_POST["password"];
+    $userName = "lorenzo.conti";
+    $firstName = "Lorenzo";
+    $lastName = "Conti";
+    $emailAddress = "loryconti1@gmail.com";
+    $password = "Loriemichi19!";
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    
+    #$userName = $_POST["username"];
+    #$firstName = $_POST["firstname"];
+    #$lastName = $_POST["lastname"];
+    #$emailAddress = $_POST["email"];
+    #$password = $_POST["password"];
+    #$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Connect
     $database = new Database();
