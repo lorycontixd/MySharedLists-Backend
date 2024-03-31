@@ -8,6 +8,8 @@ require_once('../jsonutils.php');
         public $creatorid;
         public $color;
         public $code;
+        public $memberids;
+        public $adminids;
         public $lastupdated;
         public $creationdate;
 
@@ -18,8 +20,10 @@ require_once('../jsonutils.php');
             int $creatorid,
             int $color,
             string $code,
-            DateTime $cdate,
-            DateTime $ldate,
+            array $memberids = array(),
+            array $adminids = array(),
+            DateTime $cdate = null,
+            DateTime $ldate = null,
         )
         {
             $this->id = $id;
@@ -28,6 +32,8 @@ require_once('../jsonutils.php');
             $this->creatorid = $creatorid;
             $this->color = $color;
             $this->code = $code;
+            $this->memberids = $memberids;
+            $this->adminids = $adminids;
             $this->creationdate = $cdate->format('Y-m-d H:i:s'); // Date
             $this->lastupdated = $ldate->format('Y-m-d H:i:s'); // Date
         }
@@ -46,6 +52,8 @@ require_once('../jsonutils.php');
             $this->creatorid . "\t" . 
             $this->color . "\t" . 
             $this->code . "\t" . 
+            $this->memberids . "\t" .
+            $this->adminids . "\t" .
             $this->creationdate . "\t" . 
             $this->lastupdated;
         }
