@@ -10,9 +10,11 @@
     $password = $_POST['password'];
     $hashedpass = password_hash($password, PASSWORD_DEFAULT);
     
+    echo "hi0";
+
     $database = new Database();
     $conn = $database->get_connection();
-    echo "hi";
+    echo "hi1";
     if($conn === false){
         for ($errors = sqlsrv_errors(), $i = 0, $n = count($errors); $i < $n; $i++) {
             echo "SQLSTATE: ".$errors[$i]['SQLSTATE']."<br />";
@@ -23,6 +25,7 @@
             return;
         }
     }
+    echo "hi2";
 
     $tsql = "SELECT * FROM users WHERE username = ?";
     $var = array($userName);
