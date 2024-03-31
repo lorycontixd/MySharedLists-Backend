@@ -71,7 +71,7 @@
             echo(print_r($json, true));
         }else{
             $response = "User(" . strval($row_count) . ") not found";
-            die("Error3: " . $response);
+            die("Error: " . $response);
         }
     }
 
