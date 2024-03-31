@@ -10,12 +10,6 @@ class User implements \JsonSerializable{
     public $creationdate;
     public $lastupdated;
 
-    // Currencies
-    public $currencies;
-    // Scores
-    public $scores;
-
-
     public function __construct(
         int $id,
         string $uname,
