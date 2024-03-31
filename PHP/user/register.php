@@ -20,21 +20,16 @@
         $database = new Database();
         $conn = $database->get_connection();
         if($conn === false){
-            for ($errors = sqlsrv_errors(), $i = 0, $n = count($errors); $i < $n; $i++) {
-                echo "SQLSTATE: ".$errors[$i]['SQLSTATE']."<br />";
-                echo "code: ".$errors[$i]['code']."<br />";
-                echo "message: ".$errors[$i]['message']."<br />";
-
-                // terminate
-                return;
-            }
+            $errorCode = sqlsrv_errors()[0]['code'];
+            die("Error: " . $errorCode);
         }
         $serverdate = $database->get_server_date();
 
         // Count the number of rows in the table
         $stmt = sqlsrv_query( $conn, "select * from users" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET )); 
         if ($stmt === false) {
-            die("Error1: Failed counting user rows");
+            $errorCode = sqlsrv_errors()[0]['code'];
+            die("Error: " . $errorCode);
         }
         $row_count = sqlsrv_num_rows( $stmt );  
         $useridtable = $row_count;
@@ -55,12 +50,8 @@
         $var = array($useridtable, $userName, $firstName, $lastName, $hashed_password, $serverdate, $serverdate);
         $stmt = sqlsrv_query($conn, $tsql, $var);
         if ($stmt === false){
-            echo "";
-            for ($errors = sqlsrv_errors(), $i = 0, $n = count($errors); $i < $n; $i++) {
-                echo "SQLSTATE: ".$errors[$i]['SQLSTATE']."<br />";
-                echo "code: ".$errors[$i]['code']."<br />";
-                echo "message: ".$errors[$i]['message']."<br />";
-            }
+            $errorCode = sqlsrv_errors()[0]['code'];
+            die("Error: " . $errorCode);
         }
 
         // Finalize
