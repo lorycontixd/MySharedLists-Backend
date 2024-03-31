@@ -3,12 +3,16 @@
     include '../errorcodes.php';
     include '../data/user.php';
 
+    #$userName = "lorenzo.conti";
+    #$password = "testpassword";
+
     $userName = $_POST['username'];
     $password = $_POST['password'];
     $hashedpass = password_hash($password, PASSWORD_DEFAULT);
     
     $database = new Database();
     $conn = $database->get_connection();
+    echo "hi";
     if($conn === false){
         for ($errors = sqlsrv_errors(), $i = 0, $n = count($errors); $i < $n; $i++) {
             echo "SQLSTATE: ".$errors[$i]['SQLSTATE']."<br />";
@@ -25,13 +29,14 @@
 
     $stmt = sqlsrv_query($conn, $tsql, $var);
     if ($stmt === false){
-        for ($errors = sqlsrv_errors(), $i = 0, $n = count($errors); $i < $n; $i++) {
-            echo "SQLSTATE: ".$errors[$i]['SQLSTATE']."<br />";
-            echo "code: ".$errors[$i]['code']."<br />";
-            echo "message: ".$errors[$i]['message']."<br />";
-
-            // terminate
-            return;
+        if (sqlsrv_errors() != null){
+            for ($errors = sqlsrv_errors(), $i = 0, $n = count($errors); $i < $n; $i++) {
+                echo "SQLSTATE: ".$errors[$i]['SQLSTATE']."<br />";
+                echo "code: ".$errors[$i]['code']."<br />";
+                echo "message: ".$errors[$i]['message']."<br />";
+            }
+        }else{
+            echo "Error: Code " . ErrorCodes::UserNotFoundError->value;
         }
     }
 

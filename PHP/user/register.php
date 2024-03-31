@@ -6,7 +6,7 @@
     #$firstName = "Lorenzo";
     #$lastName = "Conti";
     #$emailAddress = "loryconti1@gmail.com";
-    #$password = "Loriemichi19!";
+    #$password = "testpassword";
     #$hashed_password = password_hash($password, PASSWORD_DEFAULT);
     
     $userName = $_POST["username"];
