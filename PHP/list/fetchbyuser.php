@@ -3,8 +3,8 @@
     include "../data/user.php";
     include "../database.php";
 
-    $userid = 0;
-    //$userid = $_POST["userid"];
+    //$userid = 0;
+    $userid = $_POST["userid"];
 
     function fetch_lists_by_user(int $userid){
         $db = new Database();
