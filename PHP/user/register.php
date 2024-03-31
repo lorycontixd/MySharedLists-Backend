@@ -2,13 +2,6 @@
     include "../database.php";
     include "../data/user.php";
     
-    #$userName = "lorenzo.conti";
-    #$firstName = "Lorenzo";
-    #$lastName = "Conti";
-    #$emailAddress = "loryconti1@gmail.com";
-    #$password = "testpassword";
-    #$hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    
     $userName = $_POST["username"];
     $firstName = $_POST["firstname"];
     $lastName = $_POST["lastname"];
