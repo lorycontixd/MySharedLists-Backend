@@ -65,8 +65,8 @@
                 $row['creatorid'],
                 $row['color'],
                 $row['code'],
-                $members,
-                $admins,
+                array(),
+                array(),
                 $row['creationdate'],
                 $row['lastupdated']
             );
