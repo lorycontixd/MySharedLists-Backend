@@ -35,6 +35,11 @@
         die("Error: " . $errorCode);
         return;
     }
+    $rescount = sqlsrv_num_rows($stmt);
+    if ($rescount == 0){
+        die("Error: Item not found");
+        return;
+    }
 
     $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
     $item = new ListItem($row['id'], $row['name'], $row['description'], $row['quantity'], $row['listid'], $row['ischecked'], $row['creatorid']);
