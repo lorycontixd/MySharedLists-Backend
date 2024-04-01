@@ -2,22 +2,31 @@
 
 include 'config.php';
 
+$url = 'https://my-groceries.azurewebsites.net/PHP/user/login.php';
+
 if (isset($_POST['submit'])) {
-    $email = $_POST['email'];
+    // post to url my-groceries.azurewebsites.net/PHP/user/login.php
+    $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM userdetails where UserName = '$email' AND Password = '$password'";
-    $result = mysqli_query($conn, $sql);
+    $fields = array(
+        'username' => $username,
+        'password' => $password,
+     );
 
-    if (mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-        session_start();
-        $_SESSION['Login'] = true;
-        $_SESSION['username'] = $row['Name'];
-        header("Location: index.php");
-    } else {
-        echo "<script>alert(' Email or Password is wrong. ')</script>";
-    }
+    $postvars = http_build_query($fields);
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, count($fields));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postvars);
+    // execute post
+    $result = curl_exec($ch);
+    echo $result;
+
+    // close connection
+    curl_close($ch);
+
 }
 ?>
 
