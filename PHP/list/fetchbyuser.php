@@ -24,6 +24,8 @@
         
         // fetch
         while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){            
+            $listid = $row['id'];
+            //echo "List ID: " . $listid . "<br />";
             // fetch members
             $tsql = "select userid from [dbo].[listmembers] where listid = ?";
             $stmt2 = sqlsrv_query($conn, $tsql, array($row['id']));
@@ -60,8 +62,8 @@
                 $row['creatorid'],
                 $row['color'],
                 $row['code'],
-                array(),
-                array(),
+                $members,
+                $admins,
                 $row['creationdate'],
                 $row['lastupdated']
             );
