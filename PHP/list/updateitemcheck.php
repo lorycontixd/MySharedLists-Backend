@@ -35,7 +35,9 @@
         die("Error: " . $errorCode);
         return;
     }
-    $res = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
-    echo(print_r($res, true));
+
+    $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+    $item = new ListItem($row['id'], $row['name'], $row['description'], $row['quantity'], $row['listid'], $row['ischecked'], $row['creatorid']);
+    echo(print_r($item->jsonSerialize(), true));
     sqlsrv_free_stmt($stmt);
 ?>
