@@ -2,11 +2,22 @@
     include "../database.php";
     include "../data/list.php";
 
-    $listName = $_POST["name"];
-    $listDescription = $_POST["description"];
-    $listOwner = $_POST["creator"];
-    $colorCode = $_POST["colorCode"];
-    $iconId = $_POST["iconId"];
+    $debugMode = false;
+    
+    if ($debugMode){
+        $listName = "Test List";
+        $listDescription = "This is a test list";
+        $listOwner = 1;
+        $colorCode = 0;
+        $iconId = 0;
+    }else{
+        $listName = $_POST["name"];
+        $listDescription = $_POST["description"];
+        $listOwner = $_POST["creator"];
+        $colorCode = $_POST["colorCode"];
+        $iconId = $_POST["iconId"];
+    }
+    
     if ($iconId < 0){
         $iconId = 0;
     }
@@ -24,7 +35,7 @@
         }
     }
 
-    function create_list($listName, $listDescription, int $listOwner, int $colorCode = 0){
+    function create_list($listName, $listDescription, int $listOwner, int $colorCode = 0, int $iconId = 0){
         $db = new Database();
         $conn = $db->get_connection();
         if($conn === false){
@@ -132,8 +143,10 @@
                 $row['description'],
                 $row['creatorid'],
                 $row['color'],
-                $row['code'],
                 $row['iconid'],
+                $row['code'],
+                array($listOwner),
+                array($listOwner),
                 $row['creationdate'],
                 $row['lastupdated']
             );
@@ -145,5 +158,5 @@
         }
     }
     
-    create_list($listName, $listDescription, $listOwner, $colorCode);
+    create_list($listName, $listDescription, $listOwner, $colorCode, $iconId);
 ?>

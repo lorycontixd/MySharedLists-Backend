@@ -20,6 +20,7 @@ require_once('../jsonutils.php');
             string $description,
             int $creatorid,
             int $color,
+            int $iconid,
             string $code,
             array $memberids = array(),
             array $adminids = array(),
@@ -32,6 +33,7 @@ require_once('../jsonutils.php');
             $this->description = $description;
             $this->creatorid = $creatorid;
             $this->color = $color;
+            $this->iconid = $iconid;
             $this->code = $code;
             $this->memberids = $memberids;
             $this->adminids = $adminids;
@@ -52,6 +54,7 @@ require_once('../jsonutils.php');
             $this->description . "\t" .
             $this->creatorid . "\t" . 
             $this->color . "\t" . 
+            $this->iconid . "\t" .
             $this->code . "\t" . 
             $this->memberids . "\t" .
             $this->adminids . "\t" .
