@@ -3,8 +3,12 @@
     include "../data/user.php";
     include "../database.php";
 
-    //$userid = 0;
-    $userid = $_POST["userid"];
+    $debugMode = false;
+    if ($debugMode){
+        $userid = 0;
+    }else{
+        $userid = $_POST["userid"];
+    }
 
     function fetch_lists_by_user(int $userid){
         $db = new Database();
@@ -61,8 +65,8 @@
                 $row['description'],
                 $row['creatorid'],
                 $row['color'],
-                $row['code'],
                 $row['iconid'],
+                $row['code'],
                 $members,
                 $admins,
                 $row['creationdate'],
