@@ -8,6 +8,7 @@ require_once('../jsonutils.php');
         public $creatorid;
         public $color;
         public $code;
+        public $iconid;
         public $memberids;
         public $adminids;
         public $lastupdated;

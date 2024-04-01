@@ -2,15 +2,14 @@
     include "../database.php";
     include "../data/list.php";
 
-    #$listName = $_POST["name"];
-    #$listDescription = $_POST["description"];
-    #$listOwner = $_POST["creator"];
-    #$colorCode = $_POST["colorCode"];
-
-    $listName = "Test List 2";
-    $listDescription = "This is a test list number 2";
-    $listOwner = 1;
-    $colorCode = 2;
+    $listName = $_POST["name"];
+    $listDescription = $_POST["description"];
+    $listOwner = $_POST["creator"];
+    $colorCode = $_POST["colorCode"];
+    $iconId = $_POST["iconId"];
+    if ($iconId < 0){
+        $iconId = 0;
+    }
     
     //// Check if the color code is valid, if not set it to 0
     if ($colorCode == null){
@@ -50,15 +49,16 @@
             description,
             creatorid,
             color,
+            iconid,
             code,
             lastupdated,
             creationdate
             ) 
             VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?)";
+            (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $code = $db->generate_code('alnum', 8);
-        $var = array($listidtable, $listName, $listDescription, $listOwner, $colorCode, $code, $serverdate, $serverdate);
+        $var = array($listidtable, $listName, $listDescription, $listOwner, $colorCode, $iconId, $code, $serverdate, $serverdate);
         $stmt = sqlsrv_query($conn, $tsql, $var);
         if ($stmt === false){
             $errorCode = sqlsrv_errors()[0]['code'];
@@ -133,6 +133,7 @@
                 $row['creatorid'],
                 $row['color'],
                 $row['code'],
+                $row['iconid'],
                 $row['creationdate'],
                 $row['lastupdated']
             );
