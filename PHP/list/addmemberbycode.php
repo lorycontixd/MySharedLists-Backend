@@ -2,7 +2,7 @@
     require_once("../database.php");
     require_once("../data/list.php");
 
-    $debugMode = true;
+    $debugMode = false;
 
     if ($debugMode){
         $listcode = "iZWBClRQ";
