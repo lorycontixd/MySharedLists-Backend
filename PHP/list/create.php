@@ -14,11 +14,14 @@
         $listName = $_POST["name"];
         $listDescription = $_POST["description"];
         $listOwner = $_POST["creator"];
-        $colorCode = $_POST["colorCode"];
-        $iconId = $_POST["iconId"];
+        $colorCode = $_POST["colorcode"];
+        $iconId = $_POST["iconid"];
+    }
+    if ($iconId == null || $iconId < 0){
+        $iconId = 0;
     }
 
-    function create_list($listName, $listDescription, $listOwner, $colorCode , $iconId ){
+    function create_list($listName, $listDescription, int $listOwner, int $colorCode = 0, int $iconId = 0){
         $db = new Database();
         $conn = $db->get_connection();
         if($conn === false){
