@@ -7,7 +7,7 @@
     if ($debugMode){
         $listName = "Test List";
         $listDescription = "This is a test list";
-        $listOwner = 1;
+        $listOwner = 0;
         $colorCode = 0;
         $iconId = 0;
     }else{
@@ -52,6 +52,19 @@
         }
         $row_count = sqlsrv_num_rows( $stmt );  
         $listidtable = $row_count;
+
+        // Check if user exists
+        $stmt = sqlsrv_query( $conn, "select * from users where id = ?" , array($listOwner), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+        if ($stmt === false) {
+            $errorCode = sqlsrv_errors()[0]['code'];
+            die("Error: " . $errorCode);
+            return;
+        }
+        $row_count = sqlsrv_num_rows( $stmt );
+        if ($row_count == 0){
+            die("Error: User " . $listOwner . " doesn't exist or has been deleted");
+            return;
+        }
 
         //// Insert the new list
         $tsql= "INSERT INTO lists (
