@@ -41,6 +41,7 @@
         if($conn === false){
             $errorCode = sqlsrv_errors()[0]['code'];
             die("Error: " . $errorCode);
+            return;
         }
         $serverdate = $db->get_server_date();
 
@@ -49,6 +50,7 @@
         if ($stmt === false) {
             $errorCode = sqlsrv_errors()[0]['code'];
             die("Error: " . $errorCode);
+            return;
         }
         $row_count = sqlsrv_num_rows( $stmt );  
         $listidtable = $row_count;
