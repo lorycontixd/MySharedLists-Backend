@@ -2,10 +2,10 @@
     require_once("../database.php");
     require_once("../data/list.php");
 
-    $debugMode = false;
+    $debugMode = true;
 
     if ($debugMode){
-        $listcode = 0;
+        $listcode = "iZWBClRQ";
         $userid = 0;
     }else{
         $listcode = $_POST["code"];
@@ -15,8 +15,10 @@
     $db = new Database();
     $conn = $db->get_connection();
     if($conn === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
+        return;
     }
     $serverdate = $db->get_server_date();
 
@@ -24,8 +26,9 @@
     $tsql = "SELECT * FROM lists WHERE code = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($listcode), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $rescount = sqlsrv_num_rows($stmt);
@@ -40,8 +43,9 @@
     $tsql = "SELECT * FROM users WHERE id = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($userid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $rescount = sqlsrv_num_rows($stmt);
@@ -51,11 +55,12 @@
     }
 
     // Check if user is already a member of the list
-    $tsql = "SELECT * FROM listmembers WHERE code = ? AND userid = ?";
-    $stmt = sqlsrv_query($conn, $tsql, array($listcode, $userid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    $tsql = "SELECT * FROM listmembers WHERE listid = ? AND userid = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid, $userid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $rescount = sqlsrv_num_rows($stmt);
@@ -68,8 +73,9 @@
     $tsql = "SELECT * FROM listmembers";
     $stmt = sqlsrv_query($conn, $tsql, array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $row_count = sqlsrv_num_rows($stmt);
@@ -80,8 +86,9 @@
     $var = array($newuserid, $userid, $listid, $serverdate);
     $stmt = sqlsrv_query($conn, $tsql, $var);
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
 
@@ -91,8 +98,9 @@
     $tsql = "SELECT * FROM listmembers WHERE listid = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $members = array();
@@ -104,8 +112,9 @@
     $tsql = "SELECT * FROM listadmins WHERE listid= ?";
     $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $admins = array();
