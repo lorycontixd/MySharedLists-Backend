@@ -6,7 +6,7 @@
 
     if ($debugMode){
         $listid = 0;
-        $userid = 1;
+        $userid = 0;
     }else{
         $listid = $_POST["listid"];
         $userid = $_POST["userid"];
@@ -34,6 +34,20 @@
         return;
     }
     $list = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+
+    // Get user and check if it exists
+    $tsql = "SELECT * FROM users WHERE id = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($userid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false){
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode);
+        return;
+    }
+    $rescount = sqlsrv_num_rows($stmt);
+    if ($rescount == 0){
+        die("Error: User doesn't exist or has been deleted");
+        return;
+    }
 
     // Check if user is already a member of the list
     $tsql = "SELECT * FROM listmembers WHERE listid = ? AND userid = ?";
@@ -70,21 +84,48 @@
         return;
     }
 
-    // Return list calling fetchsingle.php
-    
-    // In editData.php
-    $data = array('listid' => $listid);
-    $url = 'https://my-groceries.azurewebsites.net/PHP/list/fetchsingle.php';
+    // Return list
 
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // Fetch members
+    $tsql = "SELECT * FROM listmembers WHERE listid = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false){
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode);
+        return;
+    }
+    $members = array();
+    while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+        array_push($members, $row['userid']);
+    }
 
-    $response = curl_exec($ch);
-    echo $response;
-    curl_close($ch);
+    // Fetch admins
+    $tsql = "SELECT * FROM listadmins WHERE listid = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false){
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode);
+        return;
+    }
+    $admins = array();
+    while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+        array_push($admins, $row['userid']);
+    }
 
-    // In submitData.php
-    $receivedData = $_POST;
+    // Return list
+    $list = new MyList(
+        $list['id'],
+        $list['name'],
+        $list['description'],
+        $list['creatorid'],
+        $list['color'],
+        $list['iconid'],
+        $list['code'],
+        $members,
+        $admins,
+        $list['lastupdated'],
+        $list['creationdate']
+    );
+    sqlsrv_free_stmt($stmt);
+    echo(print_r($list->jsonSerialize(), true));
 ?>

@@ -88,8 +88,49 @@
         die("Error: " . $errorCode);
         return;
     }
-    
 
+    // Return list
 
+    // Fetch members
+    $tsql = "SELECT * FROM listmembers WHERE listid = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false){
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode);
+        return;
+    }
+    $members = array();
+    while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+        array_push($members, $row['userid']);
+    }
+
+    // Fetch admins
+    $tsql = "SELECT * FROM listadmins WHERE listid = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false){
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode);
+        return;
+    }
+    $admins = array();
+    while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+        array_push($admins, $row['userid']);
+    }
+
+    // Return list
+    $list = new MyList(
+        $listrow['id'],
+        $listrow['name'],
+        $listrow['description'],
+        $listrow['creatorid'],
+        $listrow['color'],
+        $listrow['iconid'],
+        $listrow['code'],
+        $members,
+        $admins,
+        $listrow['lastupdated'],
+        $listrow['creationdate']
+    );
     sqlsrv_free_stmt($stmt);
+    echo(print_r($list->jsonSerialize(), true));
 ?>
