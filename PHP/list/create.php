@@ -31,8 +31,9 @@
         //// Count the number of rows in the table
         $stmt = sqlsrv_query( $conn, "select * from lists" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET )); 
         if ($stmt === false) {
+            $errorMsg = sqlsrv_errors()[0]['message'];
             $errorCode = sqlsrv_errors()[0]['code'];
-            die("Error: " . $errorCode);
+            die("Error: " . $errorCode . " - " . $errorMsg);
             return;
         }
         $row_count = sqlsrv_num_rows( $stmt );  
@@ -70,8 +71,9 @@
         $var = array($listidtable, $listName, $listDescription, $listOwner, $colorCode, $iconId, $code, $serverdate, $serverdate);
         $stmt = sqlsrv_query($conn, $tsql, $var);
         if ($stmt === false){
+            $errorMsg = sqlsrv_errors()[0]['message'];
             $errorCode = sqlsrv_errors()[0]['code'];
-            die("Error: " . $errorCode);
+            die("Error: " . $errorCode . " - " . $errorMsg);
             return;
         }
 
@@ -79,8 +81,9 @@
         // Get record id
         $stmt = sqlsrv_query( $conn, "select * from listmembers" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
         if ($stmt === false) {
+            $errorMsg = sqlsrv_errors()[0]['message'];
             $errorCode = sqlsrv_errors()[0]['code'];
-            die("Error: " . $errorCode);
+            die("Error: " . $errorCode . " - " . $errorMsg);
             return;
         }
         $row_count = sqlsrv_num_rows( $stmt );
@@ -98,8 +101,9 @@
         $var = array($listmemberidtable, $listOwner, $listidtable, $serverdate);
         $stmt = sqlsrv_query($conn, $tsql, $var);
         if ($stmt === false){
+            $errorMsg = sqlsrv_errors()[0]['message'];
             $errorCode = sqlsrv_errors()[0]['code'];
-            die("Error: " . $errorCode);
+            die("Error: " . $errorCode . " - " . $errorMsg);
             return;
         }
 
@@ -107,8 +111,9 @@
         // Get record id
         $stmt = sqlsrv_query( $conn, "select * from listadmins" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
         if ($stmt === false) {
+            $errorMsg = sqlsrv_errors()[0]['message'];
             $errorCode = sqlsrv_errors()[0]['code'];
-            die("Error: " . $errorCode);
+            die("Error: " . $errorCode . " - " . $errorMsg);
             return;
         }
         $row_count = sqlsrv_num_rows( $stmt );
@@ -126,8 +131,9 @@
         $var = array($listadminidtable, $listOwner, $listidtable, $serverdate);
         $stmt = sqlsrv_query($conn, $tsql, $var);
         if ($stmt === false){
+            $errorMsg = sqlsrv_errors()[0]['message'];
             $errorCode = sqlsrv_errors()[0]['code'];
-            die("Error: " . $errorCode);
+            die("Error: " . $errorCode . " - " . $errorMsg);
             return;
         }
 
