@@ -18,7 +18,7 @@
         $iconId = $_POST["iconId"];
     }
 
-    function create_list($listName, $listDescription, int $listOwner, int $colorCode = 0, int $iconId = 0){
+    function create_list($listName, $listDescription, $listOwner, $colorCode , $iconId ){
         $db = new Database();
         $conn = $db->get_connection();
         if($conn === false){
