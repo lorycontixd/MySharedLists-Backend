@@ -1,11 +1,12 @@
 <?php
     require_once("../database.php");
+    require_once("../data/listitem.php");
 
     $debugMode = false;
 
     if ($debugMode){
         $itemid = 0;
-        $listid = 0;
+        $listid = 1;
         $ischecked = true;
     }else{
         $itemid = $_POST["itemid"];
@@ -29,7 +30,7 @@
     }
 
     $tsql = "SELECT * FROM listitems WHERE listid = ? AND id = ?";
-    $stmt = sqlsrv_query($conn, $tsql, array($listid, $itemid));
+    $stmt = sqlsrv_query($conn, $tsql, array($listid, $itemid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
         $errorCode = sqlsrv_errors()[0]['code'];
         die("Error: " . $errorCode);
