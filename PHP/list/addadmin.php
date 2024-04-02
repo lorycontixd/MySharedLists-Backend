@@ -1,12 +1,12 @@
 <?php
+    include("../data/list.php");
     require_once("../database.php");
-    require_once("../data/list.php");
 
     $debugMode = false;
 
     if ($debugMode){
         $listid = 0;
-        $userid = 1;
+        $userid = 0;
     }else{
         $listid = $_POST["listid"];
         $userid = $_POST["userid"];
@@ -20,8 +20,7 @@
     }
     $serverdate = $db->get_server_date();
 
-    // Get list and check if it exists
-    $tsql = "SELECT * FROM lists WHERE id = ?";
+    $tsql = "select * from lists where id = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
         $errorCode = sqlsrv_errors()[0]['code'];
@@ -33,10 +32,23 @@
         die("Error: List doesn't exist or has been deleted");
         return;
     }
-    $list = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+    $listrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
 
-    // Check if user is already a member of the list
-    $tsql = "SELECT * FROM listmembers WHERE listid = ? AND userid = ?";
+    $tsql = "select * from users where id = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($userid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false){
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode);
+        return;
+    }
+    $rescount = sqlsrv_num_rows($stmt);
+    if ($rescount == 0){
+        die("Error: User doesn't exist or has been deleted");
+        return;
+    }
+
+    // Check if user is already an admin
+    $tsql = "SELECT * FROM listadmins WHERE listid = ? AND userid = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($listid, $userid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
         $errorCode = sqlsrv_errors()[0]['code'];
@@ -45,12 +57,12 @@
     }
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount > 0){
-        die("Error: User is already a member of the list");
+        die("Error: User is already an admin of the list");
         return;
     }
 
-    // Get id of new list member
-    $tsql = "SELECT * FROM listmembers";
+    // Find id of new record
+    $tsql = "SELECT * FROM listadmins";
     $stmt = sqlsrv_query($conn, $tsql, array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
         $errorCode = sqlsrv_errors()[0]['code'];
@@ -58,33 +70,26 @@
         return;
     }
     $row_count = sqlsrv_num_rows($stmt);
-    $newuserid = $row_count;
+    $newid = $row_count;
 
-    // Insert new list member
-    $tsql = "INSERT INTO listmembers (id, userid, listid, creationdate) VALUES (?, ?, ?, ?)";
-    $var = array($newuserid, $userid, $listid, $serverdate);
-    $stmt = sqlsrv_query($conn, $tsql, $var);
+    // Insert new admin
+    $tsql = "INSERT INTO listadmins (
+        id,
+        userid,
+        listid,
+        creationdate
+        ) 
+        VALUES
+        (?, ?, ?, ?)";
+    $var = array($newid, $userid, $listid, $serverdate);
+    $stmt = sqlsrv_query($conn, $tsql, $var, array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
         $errorCode = sqlsrv_errors()[0]['code'];
         die("Error: " . $errorCode);
         return;
     }
-
-    // Return list calling fetchsingle.php
     
-    // In editData.php
-    $data = array('listid' => $listid);
-    $url = 'https://my-groceries.azurewebsites.net/PHP/list/fetchsingle.php';
 
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    $response = curl_exec($ch);
-    echo $response;
-    curl_close($ch);
-
-    // In submitData.php
-    $receivedData = $_POST;
+    sqlsrv_free_stmt($stmt);
 ?>
