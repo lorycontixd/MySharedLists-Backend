@@ -17,23 +17,6 @@
         $colorCode = $_POST["colorCode"];
         $iconId = $_POST["iconId"];
     }
-    
-    if ($iconId < 0){
-        $iconId = 0;
-    }
-    
-    //// Check if the color code is valid, if not set it to 0
-    if ($colorCode == null){
-        $colorCode = 0;
-    }else{
-        if (!is_int($colorCode)){
-            $colorCode = 0;
-        }else{
-            if ($colorCode < 0 || $colorCode > 16777215){
-                $colorCode = 0;
-            }
-        }
-    }
 
     function create_list($listName, $listDescription, int $listOwner, int $colorCode = 0, int $iconId = 0){
         $db = new Database();
