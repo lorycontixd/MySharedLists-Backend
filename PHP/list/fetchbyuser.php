@@ -30,12 +30,9 @@
         return;
     }
     $listcount = sqlsrv_num_rows($stmt);
-    if ($listcount == 0){
-        die("Error: No lists found");
-        return;
-    }
+
     
-    // fetch
+    // Fetch
     while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){            
         $listid = $row['id'];
         //echo "List ID: " . $listid . "<br />";
@@ -113,6 +110,4 @@
             echo(print_r($json, true)) . "<br />";
         }
     }
-
-
 ?>
