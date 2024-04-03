@@ -68,8 +68,8 @@
         $listrow['code'],
         $memberids,
         $adminids,
+        $listrow['lastupdated'],
         $listrow['creationdate'],
-        $listrow['lastupdated']
     );
     sqlsrv_free_stmt($stmt);
     echo(print_r($list->jsonSerialize(), true));

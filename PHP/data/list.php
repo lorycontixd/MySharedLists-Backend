@@ -7,8 +7,8 @@ require_once('../jsonutils.php');
         public $description;
         public $creatorid;
         public $color;
-        public $code;
         public $iconid;
+        public $code;
         public $memberids;
         public $adminids;
         public $lastupdated;
@@ -24,8 +24,8 @@ require_once('../jsonutils.php');
             string $code,
             array $memberids = array(),
             array $adminids = array(),
-            DateTime $cdate = null,
             DateTime $ldate = null,
+            DateTime $cdate = null,
         )
         {
             $this->id = $id;

@@ -65,6 +65,7 @@
         $row['creatorid'],
         $row['color'],
         $row['iconid'],
+        $row['code'],
         $members,
         $admins,
         $row['lastupdated'],

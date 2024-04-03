@@ -69,8 +69,8 @@
                 $row['code'],
                 $members,
                 $admins,
+                $row['lastupdated'],
                 $row['creationdate'],
-                $row['lastupdated']
             );
             if ($l != null){
                 $json = $l->jsonSerialize();

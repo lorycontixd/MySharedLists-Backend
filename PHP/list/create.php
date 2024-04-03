@@ -154,8 +154,8 @@
                 $row['code'],
                 array($listOwner),
                 array($listOwner),
+                $row['lastupdated'],
                 $row['creationdate'],
-                $row['lastupdated']
             );
             $json = $l->jsonSerialize();
             echo(print_r($json, true));
