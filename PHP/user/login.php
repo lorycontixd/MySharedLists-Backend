@@ -6,21 +6,24 @@
     #$userName = "lorenzo.conti";
     #$password = "testpassword";
 
-    $userName = $_POST['username'];
-    $password = $_POST['password'];
+    $debugmode = true;
+
+    if ($debugmode){
+        $userName = "lorenzo.conti";
+        $password = "testpassword";
+    }else{    
+        $userName = $_POST['username'];
+        $password = $_POST['password'];
+    }
     $hashedpass = password_hash($password, PASSWORD_DEFAULT);
 
     $database = new Database();
     $conn = $database->get_connection();
     if($conn === false){
-        for ($errors = sqlsrv_errors(), $i = 0, $n = count($errors); $i < $n; $i++) {
-            echo "SQLSTATE: ".$errors[$i]['SQLSTATE']."<br />";
-            echo "code: ".$errors[$i]['code']."<br />";
-            echo "message: ".$errors[$i]['message']."<br />";
-
-            // terminate
-            return;
-        }
+        $errorMsg = sqlsrv_errors()[0]['message'];
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode . " - " . $errorMsg);
+        return;
     }
 
     $tsql = "SELECT * FROM users WHERE username = ?";
@@ -29,17 +32,22 @@
     $stmt = sqlsrv_query($conn, $tsql, $var);
     if ($stmt === false){
         if (sqlsrv_errors() != null){
-            for ($errors = sqlsrv_errors(), $i = 0, $n = count($errors); $i < $n; $i++) {
-                echo "SQLSTATE: ".$errors[$i]['SQLSTATE']."<br />";
-                echo "code: ".$errors[$i]['code']."<br />";
-                echo "message: ".$errors[$i]['message']."<br />";
-            }
+            $errorMsg = sqlsrv_errors()[0]['message'];
+            $errorCode = sqlsrv_errors()[0]['code'];
+            die("Error: " . $errorCode . " - " . $errorMsg);
+            return;
         }else{
             echo "Error: Code " . ErrorCodes::UserNotFoundError->value;
         }
     }
-
     $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC);
+    // check if exists
+    if ($row == null){
+        echo "Error: Code " . ErrorCodes::UserNotFoundError->value;
+        return;
+    }
+
+    // verify user
     if ($row["username"] == $userName && password_verify($password, $row["password"]))
     {
         $user = new User($row["id"], $row["username"], $row["firstname"], $row["lastname"], $row["password"], $row["creationdate"], $row["lastupdated"]);
@@ -47,11 +55,10 @@
         echo(print_r($json, true));
     }else{
         if (sqlsrv_errors() != null){
-            for ($errors = sqlsrv_errors(), $i = 0, $n = count($errors); $i < $n; $i++) {
-                echo "SQLSTATE: ".$errors[$i]['SQLSTATE']."<br />";
-                echo "code: ".$errors[$i]['code']."<br />";
-                echo "message: ".$errors[$i]['message']."<br />";
-            }
+            $errorMsg = sqlsrv_errors()[0]['message'];
+            $errorCode = sqlsrv_errors()[0]['code'];
+            die("Error: " . $errorCode . " - " . $errorMsg);
+            return;
         }else{
             echo "Error: Code " . ErrorCodes::PasswordMismatchError->value;
         }
