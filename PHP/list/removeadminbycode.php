@@ -3,6 +3,7 @@
     require_once('../data/list.php');
 
     $debugMode = false;
+    
     if ($debugMode){
         $listcode = "iZWBClRQ";
         $userid = 0;
