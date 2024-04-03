@@ -20,16 +20,20 @@
         $database = new Database();
         $conn = $database->get_connection();
         if($conn === false){
+            $errorMsg = sqlsrv_errors()[0]['message'];
             $errorCode = sqlsrv_errors()[0]['code'];
-            die("Error: " . $errorCode);
+            die("Error: " . $errorCode . " - " . $errorMsg);
+            return;
         }
         $serverdate = $database->get_server_date();
 
         // Count the number of rows in the table
         $stmt = sqlsrv_query( $conn, "select * from users" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET )); 
         if ($stmt === false) {
+            $errorMsg = sqlsrv_errors()[0]['message'];
             $errorCode = sqlsrv_errors()[0]['code'];
-            die("Error: " . $errorCode);
+            die("Error: " . $errorCode . " - " . $errorMsg);
+            return;
         }
         $row_count = sqlsrv_num_rows( $stmt );  
         $useridtable = $row_count;
@@ -50,8 +54,10 @@
         $var = array($useridtable, $userName, $firstName, $lastName, $hashed_password, $serverdate, $serverdate);
         $stmt = sqlsrv_query($conn, $tsql, $var);
         if ($stmt === false){
+            $errorMsg = sqlsrv_errors()[0]['message'];
             $errorCode = sqlsrv_errors()[0]['code'];
-            die("Error: " . $errorCode);
+            die("Error: " . $errorCode . " - " . $errorMsg);
+            return;
         }
 
         // Finalize
