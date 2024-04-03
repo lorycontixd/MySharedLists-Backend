@@ -34,7 +34,13 @@ class ListItem implements \JsonSerializable{
 
     public function jsonSerialize()
     {
-        return json_encode(JsonUtils::toArray($this));
+        //return json_encode(JsonUtils::toArray($this), JSON_UNESCAPED_SLASHES);
+        //return json_encode(get_object_vars($this));
+        return JsonUtils::toArray($this);
+    }
+
+    public function newJsonSerialize(){
+        return json_encode(get_object_vars($this));
     }
 
     public function textSerialize()

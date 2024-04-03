@@ -32,7 +32,7 @@
     while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
         $item = new ListItem($row['id'], $row['name'], $row['description'], $row['quantity'], $row['listid'], $row['ischecked'], $row['creatorid'], $row['creationdate']);
         if ($item != null){
-            echo print_r($item->jsonSerialize(), true) . "<br />";
+            echo print_r($item->newJsonSerialize(), true) . "<br />";
         }
     }
 
