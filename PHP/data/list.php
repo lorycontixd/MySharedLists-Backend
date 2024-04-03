@@ -46,7 +46,7 @@ require_once('../jsonutils.php');
 
         public function jsonSerialize()
         {
-            return json_encode(JsonUtils::toArray($this), JSON_UNESCAPED_SLASHES);
+            return json_encode(get_object_vars($this), JSON_UNESCAPED_SLASHES);
         }
 
         public function textSerialize()
