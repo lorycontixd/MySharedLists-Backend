@@ -1,5 +1,5 @@
 <?php
-    include("../data/listitem.php");
+    require_once("../data/listitem.php");
     require_once("../database.php");
 
     $debugMode = false;
@@ -21,8 +21,10 @@
     $db = new Database();
     $conn = $db->get_connection();
     if($conn === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
+        return;
     }
     $serverdate = $db->get_server_date();
 
@@ -30,8 +32,9 @@
     $tsql = "select * from [dbo].[listitems]";
     $stmt = sqlsrv_query( $conn, "select * from listitems" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET )); 
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $row_count = sqlsrv_num_rows($stmt);
@@ -60,24 +63,15 @@
     ));
 
     if ($stmt === false){
-        echo "a1";
-        
-        for ($errors = sqlsrv_errors(), $i = 0, $n = count($errors); $i < $n; $i++) {
-            echo "SQLSTATE: ".$errors[$i]['SQLSTATE']."<br />";
-            echo "code: ".$errors[$i]['code']."<br />";
-            echo "message: ".$errors[$i]['message']."<br />";
-        }
+        $errorMsg = sqlsrv_errors()[0]['message'];
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode . " - " . $errorMsg);
+        return;
     }
 
-    $item = new ListItem(
-        $itemid,
-        $itemname,
-        $itemdescription,
-        $itemquantity,
-        $listid,
-        0,
-        $creatorid
-    );
-    sqlsrv_free_stmt($stmt);
-    echo(print_r($item->jsonSerialize(), true));
+    // Return list
+    if ($debugMode){
+        $_POST['listid'] = $listid;
+    }
+    require_once("fetchsinglebyid.php");
 ?>

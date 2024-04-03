@@ -17,23 +17,27 @@
     $db = new Database();
     $conn = $db->get_connection();
     if($conn === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
+        return;
     }
 
     $tsql = "UPDATE listitems SET ischecked = ? WHERE listid = ? AND id = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($ischecked, $listid, $itemid));
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
 
     $tsql = "SELECT * FROM listitems WHERE listid = ? AND id = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($listid, $itemid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $rescount = sqlsrv_num_rows($stmt);
@@ -41,9 +45,12 @@
         die("Error: Item not found");
         return;
     }
+    $itemrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
 
-    $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
-    $item = new ListItem($row['id'], $row['name'], $row['description'], $row['quantity'], $row['listid'], $row['ischecked'], $row['creatorid']);
-    echo(print_r($item->jsonSerialize(), true));
     sqlsrv_free_stmt($stmt);
+    // Return list
+    if ($debugMode){
+        $_POST['listid'] = $listid;
+    }
+    require_once("fetchsinglebyid.php");
 ?>

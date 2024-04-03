@@ -9,6 +9,7 @@ class ListItem implements \JsonSerializable{
     public $listid;
     public $ischecked;
     public $creatorid;
+    public $creationdate;
 
     public function __construct(
         int $id,
@@ -17,7 +18,8 @@ class ListItem implements \JsonSerializable{
         int $quantity,
         int $listid,
         bool $ischecked,
-        int $creatorid
+        int $creatorid,
+        DateTime $creationdate
     )
     {
         $this->id = $id;
@@ -27,6 +29,7 @@ class ListItem implements \JsonSerializable{
         $this->listid = $listid;
         $this->ischecked = $ischecked;
         $this->creatorid = $creatorid;
+        $this->creationdate = $creationdate;
     }
 
     public function jsonSerialize()
@@ -43,7 +46,8 @@ class ListItem implements \JsonSerializable{
         $this->quantity . "\t" . 
         $this->listid . "\t" . 
         $this->ischecked . "\t" .
-        $this->creatorid;
+        $this->creatorid . "\t" .
+        $this->creationdate;
     }
 }
 ?>

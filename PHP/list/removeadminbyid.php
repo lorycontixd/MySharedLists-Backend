@@ -3,6 +3,7 @@
     require_once('../data/list.php');
 
     $debugMode = false;
+    
     if ($debugMode){
         $listid = 0;
         $userid = 0;
@@ -77,48 +78,10 @@
         return;
     }
 
-    // Fetch list members
-    $tsql = "SELECT * FROM listmembers WHERE listid = ?";
-    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
-    if ($stmt === false){
-        $errorMsg = sqlsrv_errors()[0]['message'];
-        $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " - " . $errorMsg);
-        return;
-    }
-    $members = array();
-    while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-       array_push($members, $row['userid']);
-    }
-
-    // Fetch list admins
-    $tsql = "SELECT * FROM listadmins WHERE listid = ?";
-    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
-    if ($stmt === false){
-        $errorMsg = sqlsrv_errors()[0]['message'];
-        $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " - " . $errorMsg);
-        return;
-    }
-    $admins = array();
-    while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-       array_push($admins, $row['userid']);
-    }
-
-    // Return list
-    $newlist = new MyList(
-        $listrow['id'],
-        $listrow['name'],
-        $listrow['description'],
-        $listrow['creatorid'],
-        $listrow['color'],
-        $listrow['iconid'],
-        $listrow['code'],
-        $members,
-        $admins,
-        $listrow['lastupdated'],
-        $listrow['creationdate'],
-    );
     sqlsrv_free_stmt($stmt);
-    echo(print_r($newlist->jsonSerialize(), true));
+    // Return list
+    if ($debugMode){
+        $_POST['listid'] = $listid;
+    }
+    require_once('fetchsinglebyid.php');
 ?>

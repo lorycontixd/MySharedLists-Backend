@@ -1,9 +1,8 @@
 <?php
-
     require_once('../database.php');
     require_once('../data/list.php');
 
-    $debugMode = false;
+    $debugMode = true;
 
     if ($debugMode){
         $listcode = "iZWBClRQ";
@@ -48,6 +47,9 @@
         return;
     }
 
-    sqlsrv_free_stmt($stmt);
-    echo $listid;
+    // Return list
+    if ($debugMode){
+        $_POST['code'] = $listcode;
+    }
+    require_once("fetchsinglebycode.php");
 ?>

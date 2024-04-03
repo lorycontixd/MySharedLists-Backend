@@ -1,5 +1,4 @@
 <?php
-
     require_once('../database.php');
     require_once('../data/list.php');
 
@@ -47,6 +46,9 @@
         return;
     }
 
-    sqlsrv_free_stmt($stmt);
-    echo $listid;
+    // Return list
+    if ($debugMode){
+        $_POST['listid'] = $listid;
+    }
+    require_once("fetchsinglebyid.php");
 ?>

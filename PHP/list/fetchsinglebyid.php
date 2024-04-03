@@ -1,14 +1,14 @@
 <?php
-    require_once('../database.php');
-    require_once('../data/list.php');
-    require_once('../data/listitem.php');
+    require_once("../data/list.php");
+    require_once("../data/listitem.php");
+    require_once("../database.php");
 
     $debugMode = false;
-    
+
     if ($debugMode){
-        $listCode = "0";
+        $listid = 0;
     }else{
-        $listCode = $_POST['code'];
+        $listid = $_POST["listid"];
     }
 
     $db = new Database();
@@ -16,56 +16,60 @@
     if($conn === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " - " . $errorMsg);
+        die("Error: " . $errorMsg . " (" . $errorCode . ")");
         return;
     }
 
-    $stmt = sqlsrv_query( $conn, "select * from lists where code = ?" , array($listCode), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
-    if ($stmt === false) {
+    $tsql = "select * from lists where id = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " - " . $errorMsg);
+        die("Error: " . $errorMsg . " (" . $errorCode . ")");
         return;
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        die("Error: List " . $listCode . " does not exist");
+        die("Error: List not found");
         return;
     }
     $listrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
-
-    // Fetch member ids
-    $stmt = sqlsrv_query( $conn, "select * from listmembers where listid = ?" , array($listrow['id']), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
-    if ($stmt === false) {
+    
+    // Fetch members
+    $tsql = "SELECT * FROM listmembers WHERE listid = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " - " . $errorMsg);
+        die("Error: " . $errorMsg . " (" . $errorCode . ")");
         return;
     }
-    $memberids = array();
-    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-        array_push($memberids, $row['userid']);
+    $members = array();
+    while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+        array_push($members, $row['userid']);
     }
 
-    // Fetch admin ids
-    $stmt = sqlsrv_query( $conn, "select * from listadmins where listid = ?" , array($listrow['id']), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
-    if ($stmt === false) {
+    // Fetch admins
+    $tsql = "SELECT * FROM listadmins WHERE listid = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " - " . $errorMsg);
+        die("Error: " . $errorMsg . " (" . $errorCode . ")");
         return;
     }
-    $adminids = array();
-    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-        array_push($adminids, $row['userid']);
+    $admins = array();
+    while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+        array_push($admins, $row['userid']);
     }
 
-    // Fetch list items
-    $stmt = sqlsrv_query( $conn, "select * from listitems where listid = ?" , array($listrow['id']), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
-    if ($stmt === false) {
+    // Fetch items
+    $tsql = "SELECT * FROM listitems WHERE listid = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ( $stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " - " . $errorMsg);
+        die("Error: " . $errorCode . " " . $errorMsg);
         return;
     }
     $listitems = array();
@@ -83,7 +87,7 @@
         array_push($listitems, $listitem);
     }
 
-
+    // Return list
     $list = new MyList(
         $listrow['id'],
         $listrow['name'],
@@ -92,8 +96,8 @@
         $listrow['color'],
         $listrow['iconid'],
         $listrow['code'],
-        $memberids,
-        $adminids,
+        $members,
+        $admins,
         $listrow['lastupdated'],
         $listrow['creationdate'],
         $listitems

@@ -53,6 +53,7 @@
         die("Error: User doesn't exist or has been deleted");
         return;
     }
+    $userrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
 
     // Check if user is already a member of the list
     $tsql = "SELECT * FROM listmembers WHERE listid = ? AND userid = ?";
@@ -93,49 +94,8 @@
     }
 
     // Return list
-
-    // Fetch members
-    $tsql = "SELECT * FROM listmembers WHERE listid = ?";
-    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
-    if ($stmt === false){
-        $errorMsg = sqlsrv_errors()[0]['message'];
-        $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " - " . $errorMsg);
-        return;
+    if ($debugMode){
+        $_POST['code'] = $listcode;
     }
-    $members = array();
-    while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-        array_push($members, $row['userid']);
-    }
-
-    // Fetch admins
-    $tsql = "SELECT * FROM listadmins WHERE listid= ?";
-    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
-    if ($stmt === false){
-        $errorMsg = sqlsrv_errors()[0]['message'];
-        $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " - " . $errorMsg);
-        return;
-    }
-    $admins = array();
-    while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-        array_push($admins, $row['userid']);
-    }
-
-    // Return list
-    $list = new MyList(
-        $list['id'],
-        $list['name'],
-        $list['description'],
-        $list['creatorid'],
-        $list['color'],
-        $list['iconid'],
-        $list['code'],
-        $members,
-        $admins,
-        $list['lastupdated'],
-        $list['creationdate']
-    );
-    sqlsrv_free_stmt($stmt);
-    echo(print_r($list->jsonSerialize(), true));
+    require_once("fetchsinglebycode.php");
 ?>

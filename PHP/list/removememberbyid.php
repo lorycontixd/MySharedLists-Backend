@@ -2,6 +2,7 @@
     require_once('../database.php');
 
     $debugMode = false;
+    
     if ($debugMode){
         $listid = 0;
         $userid = 0;
@@ -76,5 +77,9 @@
         return;
     }
 
-    echo $listrow['id'];
+    if ($debugMode){
+        $_POST['listid'] = $listid;
+    }
+    sqlsrv_free_stmt($stmt);
+    require_once('fetchsinglebyid.php');
 ?>

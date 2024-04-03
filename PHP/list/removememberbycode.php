@@ -2,8 +2,9 @@
     require_once('../database.php');
 
     $debugMode = false;
+    
     if ($debugMode){
-        $listcode = "AAAA";
+        $listcode = "iZWBClRQ";
         $userid = 0;
     }else{
         $listcode = $_POST['code'];
@@ -76,5 +77,10 @@
         return;
     }
 
-    echo $listrow['id'];
+    sqlsrv_free_stmt($stmt);
+    // Return list
+    if ($debugMode){
+        $_POST['code'] = $listcode;
+    }
+    require_once('fetchsinglebycode.php');
 ?>

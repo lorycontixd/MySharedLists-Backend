@@ -15,8 +15,10 @@
     $db = new Database();
     $conn = $db->get_connection();
     if($conn === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
+        return;
     }
     $serverdate = $db->get_server_date();
 
@@ -24,8 +26,9 @@
     $tsql = "SELECT * FROM lists WHERE id = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $rescount = sqlsrv_num_rows($stmt);
@@ -39,8 +42,9 @@
     $tsql = "SELECT * FROM users WHERE id = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($userid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $rescount = sqlsrv_num_rows($stmt);
@@ -48,13 +52,15 @@
         die("Error: User doesn't exist or has been deleted");
         return;
     }
+    $userrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
 
     // Check if user is already a member of the list
     $tsql = "SELECT * FROM listmembers WHERE listid = ? AND userid = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($listid, $userid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $rescount = sqlsrv_num_rows($stmt);
@@ -67,8 +73,9 @@
     $tsql = "SELECT * FROM listmembers";
     $stmt = sqlsrv_query($conn, $tsql, array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $row_count = sqlsrv_num_rows($stmt);
@@ -79,53 +86,15 @@
     $var = array($newuserid, $userid, $listid, $serverdate);
     $stmt = sqlsrv_query($conn, $tsql, $var);
     if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
 
     // Return list
-
-    // Fetch members
-    $tsql = "SELECT * FROM listmembers WHERE listid = ?";
-    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
-    if ($stmt === false){
-        $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
-        return;
+    if ($debugMode){
+        $_POST['listid'] = $listid;
     }
-    $members = array();
-    while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-        array_push($members, $row['userid']);
-    }
-
-    // Fetch admins
-    $tsql = "SELECT * FROM listadmins WHERE listid = ?";
-    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
-    if ($stmt === false){
-        $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
-        return;
-    }
-    $admins = array();
-    while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-        array_push($admins, $row['userid']);
-    }
-
-    // Return list
-    $list = new MyList(
-        $list['id'],
-        $list['name'],
-        $list['description'],
-        $list['creatorid'],
-        $list['color'],
-        $list['iconid'],
-        $list['code'],
-        $members,
-        $admins,
-        $list['lastupdated'],
-        $list['creationdate']
-    );
-    sqlsrv_free_stmt($stmt);
-    echo(print_r($list->jsonSerialize(), true));
+    require_once("fetchsinglebyid.php");
 ?>
