@@ -1,12 +1,22 @@
 <?php  
     include "../database.php";
     include "../data/user.php";
-    
-    $userName = $_POST["username"];
-    $firstName = $_POST["firstname"];
-    $lastName = $_POST["lastname"];
-    $emailAddress = $_POST["email"];
-    $password = $_POST["password"];
+
+    $debugMode = false;
+
+    if($debugMode){
+        $userName = "testusername";
+        $firstName = "testfirstname";
+        $lastName = "testlastname";
+        $emailAddress = "testemail";
+        $password = "testpassword";
+    }else{
+        $userName = $_POST["username"];
+        $firstName = $_POST["firstname"];
+        $lastName = $_POST["lastname"];
+        $emailAddress = $_POST["email"];
+        $password = $_POST["password"];
+    }
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     function user_register(
