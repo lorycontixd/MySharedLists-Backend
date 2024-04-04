@@ -6,7 +6,7 @@
     #$userName = "lorenzo.conti";
     #$password = "testpassword";
 
-    $debugmode = true;
+    $debugmode = false;
 
     if ($debugmode){
         $userName = "lorenzo.conti";
