@@ -2,7 +2,7 @@
     require_once('../database.php');
     require_once('../errorcodes.php');
 
-    $debugMode = true;
+    $debugMode = false;
 
     if ($debugMode){
         $listid = 8;
