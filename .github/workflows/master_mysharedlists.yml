@@ -62,5 +62,5 @@ jobs:
         with:
           app-name: 'mysharedlists'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9F7FD61A6FAE4AA48EEDA65496FA98CD }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_80B8757BCD4B4D79A690662AB9F07AD3 }}
           package: .
