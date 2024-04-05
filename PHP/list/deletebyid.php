@@ -2,10 +2,10 @@
     require_once('../database.php');
     require_once('../errorcodes.php');
 
-    $debugMode = false;
+    $debugMode = true;
 
     if ($debugMode){
-        $listid = 0;
+        $listid = 8;
     }else{
         $listid = $_POST["listid"];
     }
@@ -19,6 +19,21 @@
         return;
     }
     
+    // Check if list exists, fetch if it does
+    $tsql = "SELECT * FROM lists WHERE id = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode . " -" . $errorMsg);
+        return;
+    }
+    $rescount = sqlsrv_num_rows($stmt);
+    if ($rescount == 0){
+        print_error(ErrorCodes::ListNotFoundError->value, "List doesn't exist or has been deleted");
+        return;
+    }
+
     // Delete list items
     $tsql = "DELETE FROM listitems WHERE listid = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($listid));
@@ -64,7 +79,7 @@
     $stmt = sqlsrv_query($conn, $tsql, array($listid));
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount > 0){
-        print_error(ErrorCodes::DeleteError, "List items not deleted");
+        print_error(ErrorCodes::DeleteError->value, "List items not deleted");
         return;
     }
 
@@ -72,7 +87,7 @@
     $stmt = sqlsrv_query($conn, $tsql, array($listid));
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount > 0){
-        print_error(ErrorCodes::DeleteError, "List members not deleted");
+        print_error(ErrorCodes::DeleteError->value, "List members not deleted");
         return;
     }
     

@@ -30,7 +30,7 @@
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        print_error(ErrorCodes::ListNotFoundError, "List doesn't exist or has been deleted");
+        print_error(ErrorCodes::ListNotFoundError->value, "List doesn't exist or has been deleted");
         return;
     }
     $listid = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)['id'];
@@ -70,7 +70,7 @@
     $stmt = sqlsrv_query($conn, $tsql, array($listid));
     $count = sqlsrv_num_rows($stmt);
     if ($count > 0){
-        print_error(ErrorCodes::DeleteError, "List items were not deleted");
+        print_error(ErrorCodes::DeleteError->value, "List items were not deleted");
         return;
     }
 
@@ -78,7 +78,7 @@
     $stmt = sqlsrv_query($conn, $tsql, array($listid));
     $count = sqlsrv_num_rows($stmt);
     if ($count > 0){
-        print_error(ErrorCodes::DeleteError, "List members were not deleted");
+        print_error(ErrorCodes::DeleteError->value, "List members were not deleted");
         return;
     }
 
@@ -86,7 +86,7 @@
     $stmt = sqlsrv_query($conn, $tsql, array($listid));
     $count = sqlsrv_num_rows($stmt);
     if ($count > 0){
-        print_error(ErrorCodes::DeleteError, "List admins were not deleted");
+        print_error(ErrorCodes::DeleteError->value, "List admins were not deleted");
         return;
     }
 

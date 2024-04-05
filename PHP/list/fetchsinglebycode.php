@@ -30,7 +30,7 @@
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        print_error(ErrorCodes::ListNotFoundError, "List doesn't exist or has been deleted");
+        print_error(ErrorCodes::ListNotFoundError->value, "List doesn't exist or has been deleted");
         return;
     }
     $listrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);

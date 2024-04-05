@@ -34,7 +34,7 @@
     }
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount == 0){
-        print_error(ErrorCodes::ListNotFoundError, "List doesn't exist or has been deleted");
+        print_error(ErrorCodes::ListNotFoundError->value, "List doesn't exist or has been deleted");
         return;
     }
     $listrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
@@ -50,7 +50,7 @@
     }
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount == 0){
-        print_error(ErrorCodes::UserNotFoundError, "User doesn't exist or has been deleted");
+        print_error(ErrorCodes::UserNotFoundError->value, "User doesn't exist or has been deleted");
         return;
     }
     $userrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
@@ -66,7 +66,7 @@
     }
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount > 0){
-        print_error(ErrorCodes::UserAlreadyAdmin, "User is already an admin of this list");
+        print_error(ErrorCodes::UserAlreadyAdmin->value, "User is already an admin of this list");
         return;
     }
 

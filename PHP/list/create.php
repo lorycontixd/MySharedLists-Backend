@@ -53,7 +53,7 @@
     }
     $row_count = sqlsrv_num_rows( $stmt );
     if ($row_count == 0){
-        print_error(ErrorCodes::UserNotFoundError, "User doesn't exist or has been deleted");
+        print_error(ErrorCodes::UserNotFoundError->value, "User doesn't exist or has been deleted");
         return;
     }
 
