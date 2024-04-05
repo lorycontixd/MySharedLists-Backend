@@ -1,10 +1,10 @@
 <?php
   class Database{
     // Endpoint variables
-    public $name = "mygroceries";
+    public $name = "mysharedlists";
     public $uid = "lorenzo.conti";
     public $password = "Loriemichi19!";
-    public $servername = "tcp:mygroceries.database.windows.net,1433";
+    public $servername = "tcp:mysharedlists.database.windows.net,1433";
     public $conn;
 
     // Date & time
