@@ -1,5 +1,6 @@
 <?php
     require_once('../database.php');
+    require_once('../errorcodes.php');
 
     $debugMode = false;
 
@@ -31,7 +32,7 @@
     }
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount == 0){
-        die("Error: List doesn't exist or has been deleted");
+        print_error(ErrorCodes::ListNotFoundError, "List doesn't exist or has been deleted");
         return;
     }
     $listrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
@@ -47,7 +48,7 @@
     }
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount == 0){
-        die("Error: Item doesn't exist or has been deleted");
+        print_error(ErrorCodes::ItemNotFoundError, "Item doesn't exist or has been deleted");
         return;
     }
     $itemrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
@@ -63,7 +64,7 @@
     }
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount == 0){
-        die("Error: Item is not in the list");
+        print_error(ErrorCodes::ItemNotFoundError, "Item doesn't exist in the list");
         return;
     }
 

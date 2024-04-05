@@ -1,5 +1,6 @@
 <?php
     require_once('../database.php');
+    require_once('../errorcodes.php');
 
     $debugMode = false;
 
@@ -14,7 +15,7 @@
     if($conn === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorMsg . " (" . $errorCode . ")");
+        die("Error: " . $errorCode . " -" . $errorMsg);
         return;
     }
 
@@ -24,12 +25,12 @@
     if ($stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorMsg . " (" . $errorCode . ")");
+        die("Error: " . $errorCode . " -" . $errorMsg);
         return;
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        die("Error: List not found");
+        print_error(ErrorCodes::ListNotFoundError, "List doesn't exist or has been deleted");
         return;
     }
     $listid = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)['id'];
@@ -40,7 +41,7 @@
     if ($stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorMsg . " (" . $errorCode . ")");
+        die("Error: " . $errorCode . " -" . $errorMsg);
         return;
     }
 
@@ -50,7 +51,7 @@
     if ($stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorMsg . " (" . $errorCode . ")");
+        die("Error: " . $errorCode . " -" . $errorMsg);
         return;
     }
 
@@ -60,7 +61,32 @@
     if ($stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorMsg . " (" . $errorCode . ")");
+        die("Error: " . $errorCode . " -" . $errorMsg);
+        return;
+    }
+
+    // Check that no items, members or admins are left
+    $tsql = "SELECT * FROM listitems WHERE listid = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid));
+    $count = sqlsrv_num_rows($stmt);
+    if ($count > 0){
+        print_error(ErrorCodes::DeleteError, "List items were not deleted");
+        return;
+    }
+
+    $tsql = "SELECT * FROM listmembers WHERE listid = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid));
+    $count = sqlsrv_num_rows($stmt);
+    if ($count > 0){
+        print_error(ErrorCodes::DeleteError, "List members were not deleted");
+        return;
+    }
+
+    $tsql = "SELECT * FROM listadmins WHERE listid = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid));
+    $count = sqlsrv_num_rows($stmt);
+    if ($count > 0){
+        print_error(ErrorCodes::DeleteError, "List admins were not deleted");
         return;
     }
 
@@ -70,7 +96,7 @@
     if ($stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorMsg . " (" . $errorCode . ")");
+        die("Error: " . $errorCode . " -" . $errorMsg);
         return;
     }
     

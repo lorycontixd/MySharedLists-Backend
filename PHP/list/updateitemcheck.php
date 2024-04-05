@@ -1,6 +1,7 @@
 <?php
     require_once("../database.php");
     require_once("../data/listitem.php");
+    require_once("../errorcodes.php");
 
     $debugMode = false;
 
@@ -42,7 +43,7 @@
     }
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount == 0){
-        die("Error: Item not found");
+        print_error(ErrorCodes::ItemNotFoundError, "Item doesn't exist or has been deleted");
         return;
     }
     $itemrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);

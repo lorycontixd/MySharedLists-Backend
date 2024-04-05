@@ -1,6 +1,7 @@
 <?php
     require_once "../database.php";
     require_once "../data/list.php";
+    require_once "../errorcodes.php";
 
     $debugMode = false;
     
@@ -52,7 +53,7 @@
     }
     $row_count = sqlsrv_num_rows( $stmt );
     if ($row_count == 0){
-        die("Error: User " . $listOwner . " doesn't exist or has been deleted");
+        print_error(ErrorCodes::UserNotFoundError, "User doesn't exist or has been deleted");
         return;
     }
 

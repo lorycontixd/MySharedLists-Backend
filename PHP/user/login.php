@@ -37,13 +37,14 @@
             die("Error: " . $errorCode . " - " . $errorMsg);
             return;
         }else{
-            echo "Error: Code " . ErrorCodes::UserNotFoundError->value;
+            echo print_error(ErrorCodes::UserNotFoundError->value, "User not found");
+            return;
         }
     }
     $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC);
     // check if exists
     if ($row == null){
-        echo "Error: Code " . ErrorCodes::UserNotFoundError->value;
+        echo print_error(ErrorCodes::UserNotFoundError->value, "User not found");
         return;
     }
 
@@ -60,7 +61,8 @@
             die("Error: " . $errorCode . " - " . $errorMsg);
             return;
         }else{
-            echo "Error: Code " . ErrorCodes::PasswordMismatchError->value;
+            echo print_error(ErrorCodes::LoginFailedCredentials->value, "Login failed");
+            return;
         }
     }
 ?>

@@ -1,6 +1,7 @@
 <?php
     require_once("../data/listitem.php");
     require_once("../database.php");
+    require_once("../errorcodes.php");
 
     $debugMode = false;
 
@@ -27,6 +28,21 @@
         return;
     }
     $serverdate = $db->get_server_date();
+
+    // Check if list exists
+    $tsql = "SELECT * FROM lists WHERE id = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET )); 
+    if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode . " - " . $errorMsg);
+        return;
+    }
+    $rescount = sqlsrv_num_rows($stmt);
+    if ($rescount == 0){
+        print_error(ErrorCodes::ListNotFoundError, "List doesn't exist or has been deleted");
+        return;
+    }
 
     // Row number as id
     $tsql = "select * from [dbo].[listitems]";

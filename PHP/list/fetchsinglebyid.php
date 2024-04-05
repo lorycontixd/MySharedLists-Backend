@@ -16,7 +16,7 @@
     if($conn === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorMsg . " (" . $errorCode . ")");
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
 
@@ -25,12 +25,12 @@
     if ($stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorMsg . " (" . $errorCode . ")");
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        die("Error: List not found");
+        print_error(ErrorCodes::ListNotFoundError, "List doesn't exist or has been deleted");
         return;
     }
     $listrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
@@ -41,7 +41,7 @@
     if ($stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorMsg . " (" . $errorCode . ")");
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $members = array();
@@ -55,7 +55,7 @@
     if ($stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorMsg . " (" . $errorCode . ")");
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $admins = array();
@@ -69,7 +69,7 @@
     if ( $stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " " . $errorMsg);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $listitems = array();

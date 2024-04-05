@@ -2,6 +2,7 @@
     require_once('../database.php');
     require_once('../data/list.php');
     require_once('../data/listitem.php');
+    require_once('../errorcodes.php');
 
     $debugMode = false;
     
@@ -29,7 +30,7 @@
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        die("Error: List " . $listCode . " does not exist");
+        print_error(ErrorCodes::ListNotFoundError, "List doesn't exist or has been deleted");
         return;
     }
     $listrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);

@@ -1,6 +1,7 @@
 <?php
     require_once('../database.php');
     require_once('../data/list.php');
+    require_once('../errorcodes.php');
 
     $debugMode = false;
 
@@ -31,7 +32,7 @@
     }
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount == 0){
-        die("Error: List doesn't exist or has been deleted");
+        print_error(ErrorCodes::ListNotFoundError, "List doesn't exist or has been deleted");
         return;
     }
     $list = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
