@@ -78,6 +78,29 @@
         return;
     }
 
+    // Reset admin ids in the list to be in order
+    $tsql = "SELECT * FROM listmembers";
+    $stmt = sqlsrv_query($conn, $tsql, array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode . " - " . $errorMsg);
+        return;
+    }
+
+    $i = 0;
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+        $tsql = "UPDATE listmembers SET id = ? WHERE id = ?";
+        $stmt2 = sqlsrv_query($conn, $tsql, array($i, $row['id']));
+        if ($stmt2 === false){
+            $errorMsg = sqlsrv_errors()[0]['message'];
+            $errorCode = sqlsrv_errors()[0]['code'];
+            die("Error: " . $errorCode . " - " . $errorMsg);
+            return;
+        }
+        $i++;
+    }
+
     sqlsrv_free_stmt($stmt);
     // Return list
     if ($debugMode){

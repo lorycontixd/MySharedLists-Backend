@@ -90,6 +90,24 @@
         print_error(ErrorCodes::DeleteError->value, "List members not deleted");
         return;
     }
+
+    // Reset all list ids to be in order
+    $tsql = "SELECT * FROM lists ORDER BY id";
+    $stmt = sqlsrv_query($conn, $tsql, array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    $rescount = sqlsrv_num_rows($stmt);
+
+    $i = 0;
+    while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+        $tsql = "UPDATE lists SET id = ? WHERE id = ?";
+        $stmt = sqlsrv_query($conn, $tsql, array($i, $row['id']));
+        if ($stmt === false){
+            $errorMsg = sqlsrv_errors()[0]['message'];
+            $errorCode = sqlsrv_errors()[0]['code'];
+            die("Error: " . $errorCode . " -" . $errorMsg);
+            return;
+        }
+        $i++;
+    }
     
     sqlsrv_free_stmt($stmt);
     sqlsrv_close($conn);
