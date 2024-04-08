@@ -41,19 +41,22 @@
     }
     $serverdate = $db->get_server_date();
 
-    // Check if user exists
-    $stmt = sqlsrv_query($conn, "select * from users where id = ?", array($userid), array("Scrollable" => SQLSRV_CURSOR_KEYSET));
-    if ($stmt === false){
-        $errorMsg = sqlsrv_errors()[0]['message'];
-        $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " - " . $errorMsg);
-        return;
+    if ($userid >= 0){
+        // Check if user exists
+        $stmt = sqlsrv_query($conn, "select * from users where id = ?", array($userid), array("Scrollable" => SQLSRV_CURSOR_KEYSET));
+        if ($stmt === false){
+            $errorMsg = sqlsrv_errors()[0]['message'];
+            $errorCode = sqlsrv_errors()[0]['code'];
+            die("Error: " . $errorCode . " - " . $errorMsg);
+            return;
+        }
+        $row_count = sqlsrv_num_rows($stmt);
+        if ($row_count == 0){
+            print_error(ErrorCodes::UserNotFoundError->value, "User doesn't exist or has been deleted");
+            return;
+        }
     }
-    $row_count = sqlsrv_num_rows($stmt);
-    if ($row_count == 0){
-        print_error(ErrorCodes::UserNotFoundError->value, "User doesn't exist or has been deleted");
-        return;
-    }
+    
 
     // Count log id
     $stmt = sqlsrv_query($conn, "select * from logs", array(), array("Scrollable" => SQLSRV_CURSOR_KEYSET));
