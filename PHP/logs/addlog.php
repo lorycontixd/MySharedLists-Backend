@@ -83,7 +83,7 @@
         devicemodel,
         devicetype,
         deviceos,
-        createddate
+        creationdate
     ) VALUES (
         ?,
         ?,
