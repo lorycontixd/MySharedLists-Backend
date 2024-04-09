@@ -7,9 +7,9 @@
     $debugMode = false;
 
     if ($debugMode){
-        $creatorid = 0;
-        $invitedid = 1;
-        $listid = 0;
+        $creatorid = 1;
+        $invitedid = 0;
+        $listid = 2;
     }else{
         $creatorid = $_POST['creatorid'];
         $invitedid = $_POST['invitedid'];
