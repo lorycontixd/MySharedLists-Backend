@@ -28,5 +28,26 @@
             $this->dayduration = $dayduration;
             $this->creationdate = $creationdate;
         }
+
+        public function jsonSerialize()
+        {
+            return JsonUtils::toArray($this);
+        }
+
+        public function newJsonSerialize(){
+            return json_encode(get_object_vars($this));
+        }
+
+        public function textSerialize()
+        {
+            return 
+            $this->id . "\t" .
+            $this->creatorid . "\t" . 
+            $this->invitedid . "\t" .
+            $this->listid . "\t" . 
+            $this->wasviewed . "\t" .
+            $this->dayduration . "\t" .
+            $this->creationdate;
+        }
     }
 ?>

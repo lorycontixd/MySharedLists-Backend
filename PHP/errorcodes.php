@@ -6,11 +6,12 @@
         case UserNotFoundError = 2;
         case ListNotFoundError = 3;
         case ItemNotFoundError = 4;
-        case UserAlreadyMember = 5;
-        case UserAlreadyAdmin = 6;
-        case DeleteError = 7;
-        case UserNotMemberError = 8;
-        case UserNotAdminError = 9;
+        case InvitationNotFoundError = 5;
+        case UserAlreadyMember = 6;
+        case UserAlreadyAdmin = 7;
+        case DeleteError = 8;
+        case UserNotMemberError = 9;
+        case UserNotAdminError = 10;
     }
 
     function print_error($errorCode, $errorMsg){
