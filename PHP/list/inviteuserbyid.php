@@ -1,17 +1,17 @@
 <?php
-    require_once('../../database.php');
-    require_once('../../data/user.php');
-    require_once('../../data/list.php');
+    require_once('../database.php');
+    require_once('../data/user.php');
+    require_once('../data/list.php');
 
     $debugMode = false;
 
     if ($debugMode){
         $creatorid = 0;
-        $invitedusername = "lc";
+        $invitedid = 1;
         $listid = 0;
     }else{
         $creatorid = $_POST['creatorid'];
-        $invitedusername = $_POST['invitedusername'];
+        $invitedid = $_POST['invitedid'];
         $listid = $_POST['listid'];
     }
     
@@ -37,7 +37,7 @@
         return;
     }
 
-    $stmt = sqlsrv_query( $conn, "select * from users where username = ?" , array($invitedusername), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    $stmt = sqlsrv_query( $conn, "select * from users where id = ?" , array($invitedid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
         $errorCode = sqlsrv_errors()[0]['code'];
         die("Error: " . $errorCode);
@@ -45,11 +45,7 @@
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        die("Error: User " . $invitedusername . " does not exist");
-        return;
-    }
-    if ($count > 1){
-        die("Error: Multiple users with username " . $invitedusername . " exist");
+        die("Error: User " . $invitedid . " does not exist");
         return;
     }
     $inviteduser = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
@@ -66,6 +62,19 @@
         die("Error: List " . $listid . " does not exist");
         return;
     }
+    
+    // Check that the user is not already invited to the list
+    $stmt = sqlsrv_query( $conn, "select * from listinvitations where invitedid = ? and listid = ?" , array($invitedid, $listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false) {
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode);
+        return;
+    }
+    $count = sqlsrv_num_rows($stmt);
+    if ($count > 0){
+        die("Error: User " . $inviteduser['username'] . " is already invited to list ");
+        return;
+    }
 
     // Fetch invitation id
     $stmt = sqlsrv_query( $conn, "select * from listinvitations", array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
@@ -78,7 +87,7 @@
     $invitationid = $count;
 
     // Insert list invitation
-    $stmt = sqlsrv_query( $conn, "insert into listinvitations (id, creatorid, invitedid, listid, wasviewed, dayduration, creationdate) values (?,?,?,?,?,?,?)" , array($invitationid, $creatorid, $inviteduser['id'], $listid, 0, 7, $serverdate));
+    $stmt = sqlsrv_query( $conn, "insert into listinvitations (id, creatorid, invitedid, listid, wasviewed, dayduration, creationdate) values (?,?,?,?,?,?,?)" , array($invitationid, $creatorid, $invitedid, $listid, 0, 7, $serverdate));
     if ($stmt === false) {
         $errorCode = sqlsrv_errors()[0]['code'];
         die("Error: " . $errorCode);
@@ -86,5 +95,5 @@
     }
     
     $_POST['invitationid'] = $invitationid;
-    require_once('fetchsinglebyid.php');
+    require_once('fetchsingleinvitationbyid.php');
 ?>

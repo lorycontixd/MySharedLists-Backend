@@ -1,7 +1,7 @@
 <?php
-    require_once('../../data/invitation.php');
-    require_once('../../database.php');
-    require_once('../../errorcodes.php');
+    require_once('../data/listinvitation.php');
+    require_once('../database.php');
+    require_once('../errorcodes.php');
 
     $debugMode = false;
 
@@ -20,7 +20,7 @@
         return;
     }
 
-    $tsql = "select * from invitations where id = ?";
+    $tsql = "select * from listinvitations where id = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($id), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
@@ -47,5 +47,5 @@
 
     sqlsrv_free_stmt($stmt);
     sqlsrv_close($conn);
-    echo(print_r($invitation->jsonSerialize(), true));
+    echo(print_r($invitation->newJsonSerialize(), true));
 ?>
