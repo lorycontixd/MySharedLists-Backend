@@ -9,9 +9,11 @@
         case InvitationNotFoundError = 5;
         case UserAlreadyMember = 6;
         case UserAlreadyAdmin = 7;
-        case DeleteError = 8;
-        case UserNotMemberError = 9;
-        case UserNotAdminError = 10;
+        case UserAlreadyInvitedError = 8;
+        case DeleteError = 9;
+        case UserNotMemberError = 10;
+        case UserNotAdminError = 11;
+        case ConflictError = 12;
     }
 
     function print_error($errorCode, $errorMsg){

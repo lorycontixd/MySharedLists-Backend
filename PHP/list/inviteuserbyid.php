@@ -2,6 +2,7 @@
     require_once('../database.php');
     require_once('../data/user.php');
     require_once('../data/list.php');
+    require_once('../errorcodes.php');
 
     $debugMode = false;
 
@@ -18,8 +19,9 @@
     $db = new Database();
     $conn = $db->get_connection();
     if($conn === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $serverdate = $db->get_server_date();
@@ -27,20 +29,22 @@
     // Check if users exists
     $stmt = sqlsrv_query( $conn, "select * from users where id = ?" , array($creatorid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        die("Error: User " . $creatorid . " does not exist");
+        print_error(ErrorCodes::UserNotFoundError, "User does not exist or has been deleted");
         return;
     }
 
     $stmt = sqlsrv_query( $conn, "select * from users where id = ?" , array($invitedid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $count = sqlsrv_num_rows($stmt);
@@ -53,8 +57,9 @@
     // Check if list exists
     $stmt = sqlsrv_query( $conn, "select * from lists where id = ?" , array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $count = sqlsrv_num_rows($stmt);
@@ -66,8 +71,9 @@
     // Check that the user is not already invited to the list
     $stmt = sqlsrv_query( $conn, "select * from listinvitations where invitedid = ? and listid = ?" , array($invitedid, $listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $count = sqlsrv_num_rows($stmt);
@@ -79,8 +85,9 @@
     // Fetch invitation id
     $stmt = sqlsrv_query( $conn, "select * from listinvitations", array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $count = sqlsrv_num_rows($stmt);
@@ -89,8 +96,9 @@
     // Insert list invitation
     $stmt = sqlsrv_query( $conn, "insert into listinvitations (id, creatorid, invitedid, listid, wasviewed, dayduration, creationdate) values (?,?,?,?,?,?,?)" , array($invitationid, $creatorid, $invitedid, $listid, 0, 7, $serverdate));
     if ($stmt === false) {
+        $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode);
+        die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     
