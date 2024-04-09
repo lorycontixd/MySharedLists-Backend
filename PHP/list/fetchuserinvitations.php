@@ -19,7 +19,7 @@
         return;
     }
 
-    $stmt = sqlsrv_query( $conn, "select * from listinvitations where invitedid = ? and isviewed = 0" , array($userid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    $stmt = sqlsrv_query( $conn, "select * from listinvitations where invitedid = ? and wasviewed = 0" , array($userid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
