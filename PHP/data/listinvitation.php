@@ -1,6 +1,12 @@
 <?php
     require_once('../jsonutils.php');
 
+    enum ListInvitationStatus: int{
+        case Pending = 0;
+        case Accepted = 1;
+        case Rejected = 2;
+    }
+
     class ListInvitation implements \JsonSerializable{
         public $id;
         public $creatorid;
@@ -9,11 +15,11 @@
         public $listid;
         public $listname;
         public $viewed;
-        public $accepted;
+        public $status;
         public $dayduration;
         public $creationdate;
 
-        public function __construct($id, $creatorid, $invitedid, $creatorusername, $listid, $listname, $viewed, $accepted, $dayduration, $creationdate){
+        public function __construct($id, $creatorid, $invitedid, $creatorusername, $listid, $listname, $viewed, $status, $dayduration, $creationdate){
             $this->id = $id;
             $this->creatorid = $creatorid;
             $this->invitedid = $invitedid;
@@ -21,7 +27,7 @@
             $this->listid = $listid;
             $this->listname = $listname;
             $this->viewed = $viewed;
-            $this->accepted = $accepted;
+            $this->status = $status;
             $this->dayduration = $dayduration;
             $this->creationdate = $creationdate;
         }
@@ -45,7 +51,7 @@
             $this->listid . "\t" . 
             $this->listname . "\t" .
             $this->viewed . "\t" .
-            $this->accepted . "\t" .
+            $this->status . "\t" .
             $this->dayduration . "\t" .
             $this->creationdate;
         }
