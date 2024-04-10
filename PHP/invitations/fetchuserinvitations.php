@@ -33,8 +33,11 @@
             $row['id'],
             $row['creatorid'],
             $row['invitedid'],
+            $row['creatorusername'],
             $row['listid'],
-            $row['wasviewed'],
+            $row['listname'],
+            $row['viewed'],
+            $row['accepted'],
             $row['dayduration'],
             $row['creationdate']
         );

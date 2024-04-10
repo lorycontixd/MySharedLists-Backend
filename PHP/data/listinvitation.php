@@ -5,26 +5,23 @@
         public $id;
         public $creatorid;
         public $invitedid;
+        public $creatorusername;
         public $listid;
-        public $wasviewed;
+        public $listname;
+        public $viewed;
+        public $accepted;
         public $dayduration;
         public $creationdate;
 
-        public function __construct(
-            int $id,
-            int $creatorid,
-            int $invitedid,
-            int $listid,
-            bool $wasviewed,
-            int $dayduration,
-            DateTime $creationdate
-        )
-        {
+        public function __construct($id, $creatorid, $invitedid, $creatorusername, $listid, $listname, $viewed, $accepted, $dayduration, $creationdate){
             $this->id = $id;
             $this->creatorid = $creatorid;
             $this->invitedid = $invitedid;
+            $this->creatorusername = $creatorusername;
             $this->listid = $listid;
-            $this->wasviewed = $wasviewed;
+            $this->listname = $listname;
+            $this->viewed = $viewed;
+            $this->accepted = $accepted;
             $this->dayduration = $dayduration;
             $this->creationdate = $creationdate;
         }
@@ -44,8 +41,11 @@
             $this->id . "\t" .
             $this->creatorid . "\t" . 
             $this->invitedid . "\t" .
+            $this->creatorusername . "\t" .
             $this->listid . "\t" . 
-            $this->wasviewed . "\t" .
+            $this->listname . "\t" .
+            $this->viewed . "\t" .
+            $this->accepted . "\t" .
             $this->dayduration . "\t" .
             $this->creationdate;
         }

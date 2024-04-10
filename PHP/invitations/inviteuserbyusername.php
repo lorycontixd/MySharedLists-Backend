@@ -9,7 +9,7 @@
     if ($debugMode){
         $creatorid = 1;
         $invitedusername = "lc";
-        $listid = 0;
+        $listid = 2;
     }else{
         $creatorid = $_POST['creatorid'];
         $invitedusername = $_POST['invitedusername'];
@@ -39,6 +39,7 @@
         print_error(ErrorCodes::UserNotFoundError, "User does not exist or has been deleted");
         return;
     }
+    $creatoruser = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
 
     $stmt = sqlsrv_query( $conn, "select * from users where username = ?" , array($invitedusername), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
@@ -49,14 +50,11 @@
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        print_error(ErrorCodes::UserNotFoundError, "User does not exist or has been deleted");
-        return;
-    }
-    if ($count > 1){
-        print_error(ErrorCodes::ConflictError, "Multiple users with the same username");
+        die("Error: User " . $invitedid . " does not exist");
         return;
     }
     $inviteduser = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+    $invitedid = $inviteduser['id'];
 
     // Check if list exists
     $stmt = sqlsrv_query( $conn, "select * from lists where id = ?" , array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
@@ -68,12 +66,13 @@
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        print_error(ErrorCodes::ListNotFoundError, "List does not exist or has been deleted");
+        die("Error: List " . $listid . " does not exist");
         return;
     }
+    $list = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
 
     // Check that the user is not already invited to the list
-    $stmt = sqlsrv_query( $conn, "select * from listinvitations where invitedid = ? and listid = ?" , array($inviteduser['id'], $listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    $stmt = sqlsrv_query( $conn, "select * from listinvitations where invitedid = ? and listid = ?" , array($invitedid, $listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
@@ -82,7 +81,7 @@
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count > 0){
-        print_error(ErrorCodes::UserAlreadyInvitedError, "User " . $inviteduser['username'] . " is already invited to list " . $listid);
+        die("Error: User " . $inviteduser['username'] . " is already invited to list ");
         return;
     }
 
@@ -98,7 +97,7 @@
     $invitationid = $count;
 
     // Insert list invitation
-    $stmt = sqlsrv_query( $conn, "insert into listinvitations (id, creatorid, invitedid, listid, wasviewed, dayduration, creationdate) values (?,?,?,?,?,?,?)" , array($invitationid, $creatorid, $inviteduser['id'], $listid, 0, 7, $serverdate));
+    $stmt = sqlsrv_query( $conn, "insert into listinvitations (id, creatorid, invitedid, creatorusername, listid, listname, viewed, accepted, dayduration, creationdate) values (?,?,?,?,?,?,?,?,?,?)", array($invitationid, $creatorid, $invitedid, $creatoruser['username'], $listid, $list['name'], 0, 0, 7, $serverdate), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
