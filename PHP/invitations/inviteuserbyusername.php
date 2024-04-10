@@ -97,7 +97,7 @@
     $invitationid = $count;
 
     // Insert list invitation
-    $stmt = sqlsrv_query( $conn, "insert into listinvitations (id, creatorid, invitedid, creatorusername, listid, listname, viewed, accepted, dayduration, creationdate) values (?,?,?,?,?,?,?,?,?,?)", array($invitationid, $creatorid, $invitedid, $creatoruser['username'], $listid, $list['name'], 0, 0, 7, $serverdate), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    $stmt = sqlsrv_query( $conn, "insert into listinvitations (id, creatorid, invitedid, creatorusername, listid, listname, viewed, status, dayduration, creationdate) values (?,?,?,?,?,?,?,?,?,?)", array($invitationid, $creatorid, $invitedid, $creatoruser['username'], $listid, $list['name'], 0, 0, 7, $serverdate), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];

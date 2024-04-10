@@ -43,7 +43,7 @@
         $row['listid'],
         $row['listname'],
         $row['viewed'],
-        $row['accepted'],
+        $row['status'],
         $row['dayduration'],
         $row['creationdate']
     );
