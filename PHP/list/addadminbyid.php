@@ -66,7 +66,7 @@
     }
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount > 0){
-        print_error(ErrorCodes::UserAlreadyAdmin->value, "User is already an admin of this list");
+        print_error(ErrorCodes::UserAlreadyAdminError->value, "User is already an admin of this list");
         return;
     }
 

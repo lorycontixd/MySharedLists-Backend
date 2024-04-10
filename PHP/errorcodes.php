@@ -8,7 +8,7 @@
         case ItemNotFoundError = 4;
         case InvitationNotFoundError = 5;
         case UseAlreadyMemberError = 6;
-        case UserAlreadyAdmin = 7;
+        case UserAlreadyAdminError = 7;
         case UserAlreadyInvitedError = 8;
         case DeleteError = 9;
         case UserNotMemberError = 10;
