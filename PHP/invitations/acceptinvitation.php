@@ -3,12 +3,16 @@
     require_once('../database.php');
     require_once('../data/listinvitation.php');
 
-    $debugMode = false;
+    $debugMode = true;
 
     if ($debugMode){
         $invitationid = 0;
+        $listid = 0;
+        $userid = 0;
     }else{
         $invitationid = $_POST['invitationid'];
+        $listid = $_POST['listid'];
+        $userid = $_POST['userid'];
     }
 
     $db = new Database();
@@ -56,6 +60,11 @@
         $_POST["invitationid"] = $invitationid;
     }
 
-    sqlsrv_free_stmt($stmt);
-    require_once('fetchsingleinvitationbyid.php');
+    if ($debugMode){
+        $_POST['listid'] = $listid;
+        $_POST['userid'] = $userid; 
+    }
+
+    require_once('../list/addmemberbyid.php');
+
 ?>

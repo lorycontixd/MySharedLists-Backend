@@ -67,7 +67,7 @@
     }
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount > 0){
-        print_error(ErrorCodes::UserAlreadyMember->value, "User is already a member of the list");
+        print_error(ErrorCodes::UserAlreadyMemberError->value, "User is already a member of the list");
         return;
     }
 
