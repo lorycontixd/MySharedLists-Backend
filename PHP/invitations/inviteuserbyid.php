@@ -36,7 +36,7 @@
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        print_error(ErrorCodes::UserNotFoundError, "User does not exist or has been deleted");
+        print_error(ErrorCodes::UserNotFoundError->value, "User does not exist or has been deleted");
         return;
     }
     $creatoruser = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
