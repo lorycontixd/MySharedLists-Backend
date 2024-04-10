@@ -39,7 +39,6 @@
     $invitation = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
 
     // Update
-    $newstate = $newstate != 0 ? 1 : 0;
     $stmt = sqlsrv_query( $conn, "update listinvitations set status = ? where id = ?" , array($newstate, $invitationid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
         $errorMsg = sqlsrv_errors()[0]['message'];
