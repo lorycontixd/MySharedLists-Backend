@@ -20,6 +20,20 @@
         return;
     }
 
+    // Check if invitation exists
+    $stmt = sqlsrv_query( $conn, "select * from listinvitations where id = ?" , array($invitationid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false) {
+        $errorMsg = sqlsrv_errors()[0]['message'];
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode . " - " . $errorMsg);
+        return;
+    }
+    $count = sqlsrv_num_rows($stmt);
+    if ($count == 0){
+        print_error(ErrorCodes::InvitationNotFoundError->value, "Invitation does not exist or has been deleted");
+        return;
+    }
+
     $tsql = "update listinvitations set status = 1 where id = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($invitationid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
