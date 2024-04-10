@@ -4,7 +4,7 @@
     require_once('../data/list.php');
     require_once('../errorcodes.php');
 
-    $debugMode = false;
+    $debugMode = true;
 
     if ($debugMode){
         $creatorid = 1;
