@@ -33,7 +33,7 @@
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        print_error(ErrorCodes::InvitationNotFoundError, "Invitation does not exist or has been deleted");
+        print_error(ErrorCodes::InvitationNotFoundError->value, "Invitation does not exist or has been deleted");
         return;
     }
     $invitation = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
