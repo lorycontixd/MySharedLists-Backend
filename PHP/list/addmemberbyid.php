@@ -12,7 +12,6 @@
         $listid = $_POST["listid"];
         $userid = $_POST["userid"];
     }
-    echo "=> " . $listid . " - " . $userid;
 
     $db = new Database();
     $conn = $db->get_connection();
