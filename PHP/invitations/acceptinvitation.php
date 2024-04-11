@@ -7,12 +7,8 @@
 
     if ($debugMode){
         $invitationid = 0;
-        $listid = 2;
-        $userid = 0; // invitee
     }else{
         $invitationid = $_POST['invitationid'];
-        $listid = $_POST['listid'];
-        $userid = $_POST['userid'];
     }
 
     $db = new Database();
@@ -37,6 +33,9 @@
         print_error(ErrorCodes::InvitationNotFoundError->value, "Invitation does not exist or has been deleted");
         return;
     }
+    $invitation = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+    $listid = $invitation['listid'];
+    $userid = $invitation['userid'];
 
     $tsql = "update listinvitations set status = 1 where id = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($invitationid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
