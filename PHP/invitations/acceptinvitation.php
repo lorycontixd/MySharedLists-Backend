@@ -3,12 +3,12 @@
     require_once('../database.php');
     require_once('../data/listinvitation.php');
 
-    $debugMode = true;
+    $debugMode = false;
 
     if ($debugMode){
         $invitationid = 0;
-        $listid = 0;
-        $userid = 0;
+        $listid = 2;
+        $userid = 0; // invitee
     }else{
         $invitationid = $_POST['invitationid'];
         $listid = $_POST['listid'];
