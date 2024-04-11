@@ -35,7 +35,7 @@
     }
     $invitation = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
     $listid = $invitation['listid'];
-    $userid = $invitation['userid'];
+    $userid = $invitation['invitedid'];
 
     $tsql = "update listinvitations set status = 1 where id = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($invitationid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
