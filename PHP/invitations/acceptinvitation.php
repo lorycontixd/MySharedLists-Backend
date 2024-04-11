@@ -58,11 +58,8 @@
     if ($debugMode){
         $_POST["invitationid"] = $invitationid;
     }
-
-    if ($debugMode){
-        $_POST['listid'] = $listid;
-        $_POST['userid'] = $userid; 
-    }
+    $_POST["listid"] = $listid;
+    $_POST["userid"] = $userid;
 
     require_once('../list/addmemberbyid.php');
 
