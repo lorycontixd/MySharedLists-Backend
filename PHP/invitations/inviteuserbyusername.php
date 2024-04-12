@@ -36,7 +36,7 @@
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        print_error(ErrorCodes::UserNotFoundError, "User does not exist or has been deleted");
+        print_error(ErrorCodes::UserNotFoundError->value, "User does not exist or has been deleted");
         return;
     }
     $creatoruser = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
@@ -50,7 +50,7 @@
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        die("Error: User " . $invitedid . " does not exist");
+        print_error(ErrorCodes::UserNotFoundError->value, "User " . $invitedusername . " does not exist");
         return;
     }
     $inviteduser = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
@@ -66,7 +66,7 @@
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count == 0){
-        die("Error: List " . $listid . " does not exist");
+        print_error(ErrorCodes::ListNotFoundError->value, "List doesn't exist or has been deleted");
         return;
     }
     $list = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
@@ -81,7 +81,7 @@
     }
     $count = sqlsrv_num_rows($stmt);
     if ($count > 0){
-        die("Error: User " . $inviteduser['username'] . " is already invited to list ");
+        print_error(ErrorCodes::UserAlreadyInvitedError->value, "User " . $inviteduser['username'] . " is already invited to list " . $list['name']);
         return;
     }
 
