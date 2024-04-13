@@ -74,16 +74,18 @@
             return;
         }
         $listitems = array();
-        while($row2 = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)){
+        while($itemrow = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)){
             $item = new ListItem(
-                $row2['id'],
-                $row2['name'],
-                $row2['description'],
-                $row2['quantity'],
-                $row2['listid'],
-                $row2['ischecked'],
-                $row2['creatorid'],
-                $row2['creationdate']
+                $itemrow['id'],
+                $itemrow['name'],
+                $itemrow['description'],
+                $itemrow['quantity'],
+                $itemrow['price'],
+                $itemrow['brand'],
+                $itemrow['listid'],
+                $itemrow['ischecked'],
+                $itemrow['creatorid'],
+                $itemrow['creationdate']
             );
             array_push($listitems, $item);
         }
@@ -98,6 +100,7 @@
             $row['creatorid'],
             $row['color'],
             $row['iconid'],
+            $row['currencyid'],
             $row['code'],
             $members,
             $admins,

@@ -29,8 +29,19 @@
     }
     
     $items = array();
-    while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-        $item = new ListItem($row['id'], $row['name'], $row['description'], $row['quantity'], $row['listid'], $row['ischecked'], $row['creatorid'], $row['creationdate']);
+    while($itemrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+        $item = new ListItem(
+            $itemrow['id'],
+            $itemrow['name'],
+            $itemrow['description'],
+            $itemrow['quantity'],
+            $itemrow['price'],
+            $itemrow['brand'],
+            $itemrow['listid'],
+            $itemrow['ischecked'],
+            $itemrow['creatorid'],
+            $itemrow['creationdate']
+        );
         if ($item != null){
             echo print_r($item->newJsonSerialize(), true) . "<br />";
         }

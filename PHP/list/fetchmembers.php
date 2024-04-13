@@ -67,10 +67,23 @@
 
         $user = new User(
             $userrow['id'],
+            $userrow['roleid'],
             $userrow['username'],
+            $userrow['email'],
+            $userrow['password'],
             $userrow['firstname'],
             $userrow['lastname'],
-            $userrow['password'],
+            $userrow['subscriptionplan'],
+            $userrow['subscriptiondate'],
+            $userrow['subscriptionenddate'],
+            $userrow['subscriptionstatus'],
+            $userrow['isonline'],
+            $userrow['isdeleted'],
+            $userrow['isvalidated'],
+            $userrow['validationdate'],
+            $userrow['validationcode'],
+            $userrow['validationcodeexpiration'],
+            $userrow['lastlogin'],
             $userrow['lastupdated'],
             $userrow['creationdate']
         );

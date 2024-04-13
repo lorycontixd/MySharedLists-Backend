@@ -10,12 +10,16 @@
         $itemname = "Test Item";
         $itemdescription = "This is a test item";
         $itemquantity = 1;
+        $itemprice = 0.0;
+        $itembrand = "Test Item brand";
         $creatorid = 0;
     }else{
         $listid = $_POST["listid"];
         $itemname = $_POST["name"];
         $itemdescription = $_POST["description"];
         $itemquantity = $_POST["quantity"];
+        $itemprice = $_POST["price"];
+        $itembrand = $_POST["brand"];
         $creatorid = $_POST["creatorid"];
     }
 
@@ -62,16 +66,20 @@
         name,
         description,
         quantity,
+        price,
+        brand,
         listid,
         ischecked,
         creatorid,
         creationdate
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = sqlsrv_query($conn, $tsql, array(
         $itemid,
         $itemname,
         $itemdescription,
         $itemquantity,
+        $itemprice,
+        $itembrand,
         $listid,
         0,
         $creatorid,

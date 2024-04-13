@@ -32,7 +32,12 @@
       date_default_timezone_set($this->timezone);
       $date = date('Y-m-d H:i:s');
       return $date;
-  }
+    }
+    function get_server_date_iso(){
+      date_default_timezone_set($this->timezone);
+      $date = date('Y-m-d\TH:i:s');
+      return $date;
+    }
     function get_date(){
         date_default_timezone_set($this->timezone);
         return date("d-m-Y H:i:s");

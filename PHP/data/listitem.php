@@ -6,6 +6,8 @@ class ListItem implements \JsonSerializable{
     public $name;
     public $description;
     public $quantity;
+    public $price;
+    public $brand;
     public $listid;
     public $ischecked;
     public $creatorid;
@@ -16,6 +18,8 @@ class ListItem implements \JsonSerializable{
         string $name,
         string $description,
         int $quantity,
+        float $price,
+        string $brand,
         int $listid,
         bool $ischecked,
         int $creatorid,
@@ -26,6 +30,8 @@ class ListItem implements \JsonSerializable{
         $this->name = $name;
         $this->description = $description;
         $this->quantity = $quantity;
+        $this->price = $price;
+        $this->brand = $brand;
         $this->listid = $listid;
         $this->ischecked = $ischecked;
         $this->creatorid = $creatorid;
@@ -49,6 +55,8 @@ class ListItem implements \JsonSerializable{
         $this->id . "\t" .
         $this->name . "\t" . 
         $this->description . "\t" .
+        $this->price . "\t" .
+        $this->brand . "\t" .
         $this->quantity . "\t" . 
         $this->listid . "\t" . 
         $this->ischecked . "\t" .

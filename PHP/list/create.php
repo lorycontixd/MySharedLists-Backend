@@ -11,12 +11,14 @@
         $listOwner = 0;
         $colorCode = 0;
         $iconId = 0;
+        $currencyId = 0;
     }else{
         $listName = $_POST["name"];
         $listDescription = $_POST["description"];
         $listOwner = $_POST["creator"];
         $colorCode = $_POST["colorcode"];
         $iconId = $_POST["iconid"];
+        $currencyId = $_POST["currencyid"];
     }
     if ($iconId == null || $iconId < 0){
         $iconId = 0;
@@ -65,17 +67,17 @@
         creatorid,
         color,
         iconid,
+        currencyid,
         code,
         lastupdated,
         creationdate
-        ) 
-        VALUES
-        (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    $code = $db->generate_code('alnum', 8);
-    $var = array($listidtable, $listName, $listDescription, $listOwner, $colorCode, $iconId, $code, $serverdate, $serverdate);
+    $code = $db->generate_code('alnum', 8); 
+    $var = array($listidtable, $listName, $listDescription, $listOwner, $colorCode, $iconId, $currencyId, $code, $serverdate, $serverdate);
     $stmt = sqlsrv_query($conn, $tsql, $var, array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
+        echo "y";
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
         die("Error: " . $errorCode . " - " . $errorMsg);
@@ -86,6 +88,7 @@
     // Get record id
     $stmt = sqlsrv_query( $conn, "select * from listmembers" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
+        echo "x";
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
         die("Error: " . $errorCode . " - " . $errorMsg);
@@ -106,6 +109,7 @@
     $var = array($listmemberidtable, $listOwner, $listidtable, $serverdate);
     $stmt = sqlsrv_query($conn, $tsql, $var);
     if ($stmt === false){
+        echo "a";
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
         die("Error: " . $errorCode . " - " . $errorMsg);
@@ -116,6 +120,7 @@
     // Get record id
     $stmt = sqlsrv_query( $conn, "select * from listadmins" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
+        echo "b";
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
         die("Error: " . $errorCode . " - " . $errorMsg);

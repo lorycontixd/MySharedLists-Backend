@@ -41,17 +41,38 @@
             return;
         }
     }
-    $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC);
+    $userrow = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC);
     // check if exists
-    if ($row == null){
+    if ($userrow == null){
         echo print_error(ErrorCodes::UserNotFoundError->value, "User not found");
         return;
     }
 
     // verify user
-    if ($row["username"] == $userName && password_verify($password, $row["password"]))
+    if ($userrow["username"] == $userName && password_verify($password, $userrow["password"]))
     {
-        $user = new User($row["id"], $row["username"], $row["firstname"], $row["lastname"], $row["password"], $row["creationdate"], $row["lastupdated"]);
+        $user = new User(
+            $userrow['id'],
+            $userrow['roleid'],
+            $userrow['username'],
+            $userrow['email'],
+            $userrow['password'],
+            $userrow['firstname'],
+            $userrow['lastname'],
+            $userrow['subscriptionplan'],
+            $userrow['subscriptiondate'],
+            $userrow['subscriptionenddate'],
+            $userrow['subscriptionstatus'],
+            $userrow['isonline'],
+            $userrow['isdeleted'],
+            $userrow['isvalidated'],
+            $userrow['validationdate'],
+            $userrow['validationcode'],
+            $userrow['validationcodeexpiration'],
+            $userrow['lastlogin'],
+            $userrow['lastupdated'],
+            $userrow['creationdate']
+        );
         $json = $user->jsonSerialize();
         echo(print_r($json, true));
     }else{
@@ -61,7 +82,7 @@
             die("Error: " . $errorCode . " - " . $errorMsg);
             return;
         }else{
-            echo print_error(ErrorCodes::LoginFailedCredentials->value, "Login failed");
+            echo print_error(ErrorCodes::LoginFailedCredentials->value, "Username or password is incorrect. Please try again.");
             return;
         }
     }

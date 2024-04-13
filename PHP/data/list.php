@@ -8,6 +8,7 @@
         public $creatorid;
         public $colorcode;
         public $iconid;
+        public $currencyid;
         public $code;
         public $memberids;
         public $adminids;
@@ -22,6 +23,7 @@
             int $creatorid,
             int $colorcode,
             int $iconid,
+            int $currencyid,
             string $code,
             array $memberids = array(),
             array $adminids = array(),
@@ -36,6 +38,7 @@
             $this->creatorid = $creatorid;
             $this->colorcode = $colorcode;
             $this->iconid = $iconid;
+            $this->currencyid = $currencyid;
             $this->code = $code;
             $this->memberids = $memberids;
             $this->adminids = $adminids;
@@ -58,6 +61,7 @@
             $this->creatorid . "\t" . 
             $this->colorcode . "\t" . 
             $this->iconid . "\t" .
+            $this->currencyid . "\t" .
             $this->code . "\t" . 
             $this->memberids . "\t" .
             $this->adminids . "\t" .
