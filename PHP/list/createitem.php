@@ -22,6 +22,7 @@
         $itembrand = $_POST["brand"];
         $creatorid = $_POST["creatorid"];
     }
+    $itemprice = floatval($itemprice);
 
     $db = new Database();
     $conn = $db->get_connection();
