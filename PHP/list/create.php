@@ -85,66 +85,88 @@
     }
 
     //// Insert new list member
-    // Get record id
-    $stmt = sqlsrv_query( $conn, "select * from listmembers" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    // Check if user is already a member
+    $stmt = sqlsrv_query( $conn, "select * from listmembers where userid = ? and listid = ?" , array($listOwner, $listidtable), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
-        echo "x";
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
         die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $row_count = sqlsrv_num_rows( $stmt );
-    $listmemberidtable = $row_count;
+    if ($row_count <= 0){
+        // Get record id
+        $stmt = sqlsrv_query( $conn, "select * from listmembers" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+        if ($stmt === false) {
+            echo "x";
+            $errorMsg = sqlsrv_errors()[0]['message'];
+            $errorCode = sqlsrv_errors()[0]['code'];
+            die("Error: " . $errorCode . " - " . $errorMsg);
+            return;
+        }
+        $row_count = sqlsrv_num_rows( $stmt );
+        $listmemberidtable = $row_count;
 
-    // Insert new list member
-    $tsql= "INSERT INTO listmembers (
-        id,
-        userid,
-        listid,
-        creationdate
-        ) 
-        VALUES
-        (?, ?, ?, ?)";
-    $var = array($listmemberidtable, $listOwner, $listidtable, $serverdate);
-    $stmt = sqlsrv_query($conn, $tsql, $var);
-    if ($stmt === false){
-        echo "a";
-        $errorMsg = sqlsrv_errors()[0]['message'];
-        $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " - " . $errorMsg);
-        return;
+        // Insert new list member
+        $tsql= "INSERT INTO listmembers (
+            id,
+            userid,
+            listid,
+            creationdate
+            ) 
+            VALUES
+            (?, ?, ?, ?)";
+        $var = array($listmemberidtable, $listOwner, $listidtable, $serverdate);
+        $stmt = sqlsrv_query($conn, $tsql, $var);
+        if ($stmt === false){
+            echo "a";
+            $errorMsg = sqlsrv_errors()[0]['message'];
+            $errorCode = sqlsrv_errors()[0]['code'];
+            die("Error: " . $errorCode . " - " . $errorMsg);
+            return;
+        }
     }
 
     //// Insert new list admin
-    // Get record id
-    $stmt = sqlsrv_query( $conn, "select * from listadmins" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    // Check if user is already an admin
+    $stmt = sqlsrv_query( $conn, "select * from listadmins where userid = ? and listid = ?" , array($listOwner, $listidtable), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false) {
-        echo "b";
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
         die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
     $row_count = sqlsrv_num_rows( $stmt );
-    $listadminidtable = $row_count;
+    if ($row_count <= 0){
+        // Get record id
+        $stmt = sqlsrv_query( $conn, "select * from listadmins" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+        if ($stmt === false) {
+            echo "b";
+            $errorMsg = sqlsrv_errors()[0]['message'];
+            $errorCode = sqlsrv_errors()[0]['code'];
+            die("Error: " . $errorCode . " - " . $errorMsg);
+            return;
+        }
+        $row_count = sqlsrv_num_rows( $stmt );
+        $listadminidtable = $row_count;
 
-    // Insert new list admin
-    $tsql= "INSERT INTO listadmins (
-        id,
-        userid,
-        listid,
-        creationdate
-        ) 
-        VALUES
-        (?, ?, ?, ?)";
-    $var = array($listadminidtable, $listOwner, $listidtable, $serverdate);
-    $stmt = sqlsrv_query($conn, $tsql, $var);
-    if ($stmt === false){
-        $errorMsg = sqlsrv_errors()[0]['message'];
-        $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " - " . $errorMsg);
-        return;
+        // Insert new list admin
+        $tsql= "INSERT INTO listadmins (
+            id,
+            userid,
+            listid,
+            creationdate
+            ) 
+            VALUES
+            (?, ?, ?, ?)";
+        $var = array($listadminidtable, $listOwner, $listidtable, $serverdate);
+        $stmt = sqlsrv_query($conn, $tsql, $var);
+        if ($stmt === false){
+            $errorMsg = sqlsrv_errors()[0]['message'];
+            $errorCode = sqlsrv_errors()[0]['code'];
+            die("Error: " . $errorCode . " - " . $errorMsg);
+            return;
+        }
     }
 
     // Return list
