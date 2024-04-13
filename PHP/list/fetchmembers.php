@@ -73,6 +73,7 @@
             $userrow['password'],
             $userrow['firstname'],
             $userrow['lastname'],
+            $userrow['iconurl'],
             $userrow['subscriptionplan'],
             $userrow['subscriptiondate'],
             $userrow['subscriptionenddate'],

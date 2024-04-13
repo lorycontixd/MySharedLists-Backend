@@ -9,6 +9,7 @@
         public $password; // string: The password of the user (hashed)
         public $firstname; // string: The first name of the user
         public $lastname; // string: The last name of the user
+        public $iconurl; // string: The url of the user's icon
         public $subscriptionplan; // int: The index of the subscription plan (0 = Free, 1 = Basic, 2 = Premium)
         public $subscriptiondate; // string: The date of the user's subscription
         public $subscriptionenddate; // string: The date of the user's subscription end
@@ -31,6 +32,7 @@
             string $password,
             string $firstname,
             string $lastname,
+            string $iconurl,
             int $subscriptionplan,
             DateTime $subscriptiondate,
             DateTime $subscriptionenddate,
@@ -53,6 +55,7 @@
             $this->password = $password;
             $this->firstname = $firstname;
             $this->lastname = $lastname;
+            $this->iconurl = $iconurl;
             $this->subscriptionplan = $subscriptionplan;
             $this->subscriptiondate = $subscriptiondate->format('Y-m-d H:i:s');
             $this->subscriptionenddate= $subscriptionenddate->format('Y-m-d H:i:s');
@@ -87,6 +90,7 @@
                 'password: ' . $this->password . ', ' .
                 'firstname: ' . $this->firstname . ', ' .
                 'lastname: ' . $this->lastname . ', ' .
+                'iconurl: ' . $this->iconurl . ', ' .
                 'subscriptionplan: ' . $this->subscriptionplan . ', ' .
                 'subscriptiondate: ' . $this->subscriptiondate . ', ' .
                 'subscriptionenddate: ' . $this->subscriptionenddate . ', ' .
