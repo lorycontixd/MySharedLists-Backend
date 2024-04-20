@@ -77,6 +77,7 @@
         while($itemrow = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)){
             $item = new ListItem(
                 $itemrow['id'],
+                $itemrow['listid'],
                 $itemrow['name'],
                 $itemrow['description'],
                 $itemrow['quantity'],
