@@ -64,7 +64,7 @@
     }
 
     // Fetch items
-    $tsql = "SELECT * FROM listitems WHERE listid = ?";
+    $tsql = "SELECT * FROM listitems WHERE listid = ? order by listorder";
     $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ( $stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];

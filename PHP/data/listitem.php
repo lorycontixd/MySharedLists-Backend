@@ -3,6 +3,7 @@ require_once('../jsonutils.php');
 
 class ListItem implements \JsonSerializable{
     public $id;
+    public $listorder;
     public $name;
     public $description;
     public $quantity;
@@ -15,6 +16,7 @@ class ListItem implements \JsonSerializable{
 
     public function __construct(
         int $id,
+        int $listorder,
         string $name,
         string $description,
         int $quantity,
@@ -27,6 +29,7 @@ class ListItem implements \JsonSerializable{
     )
     {
         $this->id = $id;
+        $this->listorder = $listorder;
         $this->name = $name;
         $this->description = $description;
         $this->quantity = $quantity;
@@ -53,6 +56,7 @@ class ListItem implements \JsonSerializable{
     {
         return 
         $this->id . "\t" .
+        $this->listorder . "\t" .
         $this->name . "\t" . 
         $this->description . "\t" .
         $this->price . "\t" .
