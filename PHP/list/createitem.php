@@ -61,9 +61,27 @@
     $row_count = sqlsrv_num_rows($stmt);
     $itemid = $row_count;
 
+    // List order value is last item's order + 1
+    $tsql = "SELECT TOP 1 * FROM listitems WHERE listid = ? ORDER BY listorder DESC";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode . " - " . $errorMsg);
+        return;
+    }
+    $rescount = sqlsrv_num_rows($stmt);
+    if ($rescount == 0){
+        $itemorder = 0;
+    }else{
+        $item = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+        $itemorder = $item['listorder'] + 1;
+    }
+
     // Insert
     $tsql = "INSERT INTO listitems (
         id,
+        listorder,
         name,
         description,
         quantity,
@@ -73,9 +91,10 @@
         ischecked,
         creatorid,
         creationdate
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = sqlsrv_query($conn, $tsql, array(
         $itemid,
+        $itemorder,
         $itemname,
         $itemdescription,
         $itemquantity,
