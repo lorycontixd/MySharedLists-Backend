@@ -77,7 +77,6 @@
         return;
     }
     if ($item2['listid'] != $listid){
-        echo $item2['id'] . " - " . $item2['listid'];
         print_error(ErrorCodes::ItemNotFoundError->value, "List item 2 (id=$itemid2) doesn't belong to list (id=$listid)");
         return;
     }
