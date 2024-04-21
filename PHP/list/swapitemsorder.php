@@ -6,8 +6,8 @@
 
     if ($debugMode){
         $listid = 0;
-        $itemid1 = 0;
-        $itemid2 = 0;
+        $itemid1 = 1;
+        $itemid2 = 12;
     }else{
         $listid = $_POST['listid'];
         $itemid1 = $_POST['itemid1'];
@@ -50,7 +50,7 @@
     }
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount == 0){
-        print_error(ErrorCodes::ItemNotFoundError->value, "List item 1 doesn't exist or has been deleted");
+        print_error(ErrorCodes::ItemNotFoundError->value, "List item 1 (id=$itemid1) doesn't exist or has been deleted");
         return;
     }
     $item1 = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
@@ -66,18 +66,19 @@
     }
     $rescount = sqlsrv_num_rows($stmt);
     if ($rescount == 0){
-        print_error(ErrorCodes::ItemNotFoundError->value, "List item 2 doesn't exist or has been deleted");
+        print_error(ErrorCodes::ItemNotFoundError->value, "List item 2 (id=$itemid2) doesn't exist or has been deleted");
         return;
     }
     $item2 = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
 
     // Check if list items belongs to list
     if ($item1['listid'] != $listid){
-        print_error(ErrorCodes::ItemNotFoundError->value, "List item 1 doesn't belong to list");
+        print_error(ErrorCodes::ItemNotFoundError->value, "List item 1 (id=$itemid1) doesn't belong to list (id=$listid)");
         return;
     }
     if ($item2['listid'] != $listid){
-        print_error(ErrorCodes::ItemNotFoundError->value, "List item 2 doesn't belong to list");
+        echo $item2['id'] . " - " . $item2['listid'];
+        print_error(ErrorCodes::ItemNotFoundError->value, "List item 2 (id=$itemid2) doesn't belong to list (id=$listid)");
         return;
     }
 
