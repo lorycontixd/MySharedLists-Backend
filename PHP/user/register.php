@@ -3,13 +3,14 @@
     include "../data/user.php";
     #include "../errorcodes.php";
 
-    $debugMode = false;
+    $debugMode = true;
 
     if($debugMode){
-        $userName = "lorenzo.conti";
+        $user_code = 2;
+        $userName = "lorenzo.conti$user_code";
         $firstName = "Lorenzo";
         $lastName = "Conti";
-        $emailAddress = "testemail@email.com";
+        $emailAddress = "testemail$user_code@email.com";
         $password = "testpassword";
         
     }else{
@@ -45,8 +46,9 @@
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     $verification_code = $database->generate_code('alpha', 8);
-    $verification_code_expiration = $database->get_server_date();
-    $verification_code_expiration->date_modify('+7 day');
+    $verification_code_expiration = $database->get_server_date_obj();
+    $verification_code_expiration->modify('+7 day');
+    $verification_code_expiration = $verification_code_expiration->format('Y-m-d H:i:s');
 
     // Insert the new user
     $tsql= "INSERT INTO users (
@@ -105,7 +107,7 @@
         $serverdate, // subscriptiondate
         $serverdate, // subscriptionenddate
         $serverdate, // validationdate
-        $validation_code,
+        $verification_code,
         $verification_code_expiration, // validationcodeexpiration
         $serverdate, // lastlogin
         $serverdate, // lastupdated
