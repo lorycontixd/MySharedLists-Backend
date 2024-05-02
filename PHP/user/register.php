@@ -44,6 +44,10 @@
     $useridtable = $row_count;
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
+    $verification_code = $database->generate_code('alpha', 8);
+    $verification_code_expiration = $database->get_server_date();
+    $verification_code_expiration->date_modify('+7 day');
+
     // Insert the new user
     $tsql= "INSERT INTO users (
         id,
@@ -85,7 +89,7 @@
             0, 
             0, 
             ?, 
-            '',
+            ?,
             ?,
             ?, 
             ?, 
@@ -101,7 +105,8 @@
         $serverdate, // subscriptiondate
         $serverdate, // subscriptionenddate
         $serverdate, // validationdate
-        $serverdate, // validationcodeexpiration
+        $validation_code,
+        $verification_code_expiration, // validationcodeexpiration
         $serverdate, // lastlogin
         $serverdate, // lastupdated
         $serverdate  // creationdate
