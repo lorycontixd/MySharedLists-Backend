@@ -28,6 +28,12 @@
     function get_timezone(){
         return $this->timezone;
     }
+    function get_server_date_obj(){
+      date_default_timezone_set($this->timezone);
+      // get current datetime
+      $date = new DateTime();
+      return $date;
+    }
     function get_server_date(){
       date_default_timezone_set($this->timezone);
       $date = date('Y-m-d H:i:s');
