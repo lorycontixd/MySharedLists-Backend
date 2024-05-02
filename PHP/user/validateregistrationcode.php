@@ -53,7 +53,7 @@
     }
 
     // Update user
-    $tsql = "UPDATE users SET validationdate = ? WHERE id = ?";
+    $tsql = "UPDATE users SET validationdate = ?, isvalidated = 1 WHERE id = ?";
     $stmt = sqlsrv_query($conn, $tsql, array($serverdate, $userid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     if ($stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
