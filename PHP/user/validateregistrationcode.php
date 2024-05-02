@@ -6,8 +6,8 @@
     $debugMode = false;
 
     if($debugMode){
-        $userid = 0;
-        $code = "123456";
+        $userid = 7;
+        $code = "krrSufGJ";
     }else{
         $userid = $_POST["userid"];
         $code = $_POST["code"];
