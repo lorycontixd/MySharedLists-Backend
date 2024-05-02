@@ -3,7 +3,7 @@
     include "../data/user.php";
     #include "../errorcodes.php";
 
-    $debugMode = true;
+    $debugMode = false;
 
     if($debugMode){
         $user_code = 2;
