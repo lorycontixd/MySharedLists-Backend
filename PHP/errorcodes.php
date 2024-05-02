@@ -14,6 +14,8 @@
         case UserNotMemberError = 10;
         case UserNotAdminError = 11;
         case ConflictError = 12;
+        case InvalidValidationCode = 13;
+        case ValidationCodeExpired = 14;
     }
 
     function print_error($errorCode, $errorMsg){
