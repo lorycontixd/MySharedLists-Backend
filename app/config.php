@@ -1,9 +1,9 @@
 <?php
 
-    $database = "mygroceries";
+    $database = "mysharedlists";
     $uid = "lorenzo.conti";
     $password = "Loriemichi19!";
-    $server = "tcp:mygroceries.database.windows.net,1433";
+    $server = "tcp:mysharedlists.database.windows.net,1433";
     $connectionInfo = array("UID" => $uid, "pwd" => $password, "Database" => $database, "LoginTimeout" => 30, "Encrypt" => 1, "TrustServerCertificate" => 0);
 
     $conn = sqlsrv_connect($server, $connectionInfo);
