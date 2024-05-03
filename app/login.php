@@ -1,8 +1,8 @@
 <?php
 
-include 'config.php';
+require_once 'config.php';
 
-$url = 'https://my-groceries.azurewebsites.net/PHP/user/login.php';
+$url = 'https://mysharedlists.azurewebsites.net/PHP/user/login.php';
 
 if (isset($_POST['submit'])) {
     // post to url my-groceries.azurewebsites.net/PHP/user/login.php

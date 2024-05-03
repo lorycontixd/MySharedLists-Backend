@@ -4,7 +4,7 @@ include "config.php";
 
 session_start();
 
-$sql = "SELECT * FROM userdetails where Name = '$_SESSION[username]'";
+$sql = "SELECT * FROM users where username = '$_SESSION[username]'";
 $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
     if (!isset($_SESSION["Login"]) && $_SESSION["Login"] == false) {
