@@ -52,21 +52,7 @@
         return;
     }
     $listrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
-
-    // Check if user is a member of the list
-    $tsql = "SELECT * FROM listmembers WHERE listid = ? AND userid = ?";
-    $stmt = sqlsrv_query($conn, $tsql, array($listid, $userid), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
-    if ($stmt === false){
-        $errorMsg = sqlsrv_errors()[0]['message'];
-        $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " - " . $errorMsg);
-        return;
-    }
-    $rescount = sqlsrv_num_rows($stmt);
-    if ($rescount == 0){
-        print_error(ErrorCodes::UserNotMemberError->value, "User is not a member of the list");
-        return;
-    }
+    $listid = $listrow['id'];
 
     // Remove user from list
     $tsql = "DELETE FROM listmembers WHERE listid = ? AND userid = ?";
@@ -78,27 +64,24 @@
         return;
     }
 
-    // Reset admin ids in the list to be in order
-    $tsql = "SELECT * FROM listmembers";
-    $stmt = sqlsrv_query($conn, $tsql, array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
-    if ($stmt === false){
-        $errorMsg = sqlsrv_errors()[0]['message'];
-        $errorCode = sqlsrv_errors()[0]['code'];
-        die("Error: " . $errorCode . " - " . $errorMsg);
-        return;
-    }
-
-    $i = 0;
-    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-        $tsql = "UPDATE listmembers SET id = ? WHERE id = ?";
-        $stmt2 = sqlsrv_query($conn, $tsql, array($i, $row['id']));
+    // Remove user from list admins
+    $tsql = "DELETE FROM listadmins WHERE listid = ? AND userid = ?";
+        $stmt2 = sqlsrv_query($conn, $tsql, array($listid, $userid));
         if ($stmt2 === false){
             $errorMsg = sqlsrv_errors()[0]['message'];
             $errorCode = sqlsrv_errors()[0]['code'];
             die("Error: " . $errorCode . " - " . $errorMsg);
             return;
         }
-        $i++;
+
+    // Remove list invitations for user
+    $tsql = "DELETE FROM listinvitations WHERE listid = ? AND invitedid = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($listid, $userid));
+    if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode . " - " . $errorMsg);
+        return;
     }
 
     sqlsrv_free_stmt($stmt);
