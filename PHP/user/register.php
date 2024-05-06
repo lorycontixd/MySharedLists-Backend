@@ -33,6 +33,38 @@
     }
     $serverdate = $database->get_server_date();
 
+    // Check if the user already exists
+    // Check username first
+    $tsql = "SELECT * FROM users WHERE username = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($userName), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode . " - " . $errorMsg);
+        return;
+    }
+    $rescount = sqlsrv_num_rows($stmt);
+    if ($rescount > 0){
+        echo print_error(ErrorCodes::UserAlreadyExistsError->value, "A user with the same username already exists");
+        return;
+    }
+
+    // Check email
+    $tsql = "SELECT * FROM users WHERE email = ?";
+    $stmt = sqlsrv_query($conn, $tsql, array($emailAddress), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    if ($stmt === false){
+        $errorMsg = sqlsrv_errors()[0]['message'];
+        $errorCode = sqlsrv_errors()[0]['code'];
+        die("Error: " . $errorCode . " - " . $errorMsg);
+        return;
+    }
+    $rescount = sqlsrv_num_rows($stmt);
+    if ($rescount > 0){
+        echo print_error(ErrorCodes::UserAlreadyExistsError->value, "A user with the same email already exists");
+        return;
+    }
+
+
     // Count the number of rows in the table
     $stmt = sqlsrv_query( $conn, "select * from users" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET )); 
     if ($stmt === false) {
