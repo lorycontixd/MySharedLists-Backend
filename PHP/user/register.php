@@ -64,7 +64,6 @@
         return;
     }
 
-
     // Count the number of rows in the table
     $stmt = sqlsrv_query( $conn, "select * from users" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET )); 
     if ($stmt === false) {
@@ -194,5 +193,4 @@
         return;
     }
     sqlsrv_free_stmt($stmt);
-
 ?>
