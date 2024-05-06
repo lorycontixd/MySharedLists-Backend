@@ -1,7 +1,7 @@
 <?php  
     include "../database.php";
     include "../data/user.php";
-    #include "../errorcodes.php";
+    include "../errorcodes.php";
 
     $debugMode = false;
 
@@ -11,7 +11,7 @@
         $firstName = "Lorenzo";
         $lastName = "Conti";
         $emailAddress = "testemail$user_code@email.com";
-        $password = "testpassword";
+        $password = "Testpassword";
         
     }else{
         $userName = $_POST["username"];
@@ -32,6 +32,8 @@
         return;
     }
     $serverdate = $database->get_server_date();
+
+    // Add register constraints at server level (?)
 
     // Check if the user already exists
     // Check username first
