@@ -16,6 +16,7 @@
         case ConflictError = 12;
         case InvalidValidationCode = 13;
         case ValidationCodeExpired = 14;
+        case UserAlreadyExistsError = 15;
     }
 
     function print_error($errorCode, $errorMsg){
