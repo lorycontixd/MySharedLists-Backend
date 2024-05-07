@@ -48,9 +48,9 @@ WHAT WE EXPECT FROM YOU:
         <ul class="featureList">
           <li>2 Created Lists</li>
           <li>5 Joinable Lists</li>
-          <li class="disabled">Create items with AI</li>
+          <li class="disabled">AI Integration</li>
           <li class="disabled">Priority support</li>
-          <li class="disabled">Unlimited users</li>
+          <li class="disabled">List security with roles</li>
         </ul>
 
         <button class="button">Get Started</button>
@@ -73,9 +73,9 @@ WHAT WE EXPECT FROM YOU:
         <ul class="featureList">
           <li>5 Creatable Lists</li>
           <li>15 Joinable Lists</li>
-          <li>Create items with AI</li>
+          <li>AI Integration</li>
           <li class="disabled">Priority support</li>
-          <li class="disabled">Unlimited users</li>
+          <li class="disabled">List security with roles</li>
         </ul>
 
         <button class="button button--pink">Get Started</button>
@@ -97,9 +97,9 @@ WHAT WE EXPECT FROM YOU:
         <ul class="featureList">
           <li>Unlimited Creatable Lists</li>
           <li>Unlimited Joinable Lists</li>
-          <li>Create items with AI</li>
+          <li>AI Integration</li>
           <li>Priority support</li>
-          <li>Unlimited users</li>
+          <li>List security with roles</li>
           <li>Customizable profile</li>
         </ul>
 
