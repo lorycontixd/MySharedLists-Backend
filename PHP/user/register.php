@@ -155,7 +155,7 @@
     }
 
     // Finalize
-    $stmt = sqlsrv_query( $conn, "select * from users where id = ?" , array($row_count), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+    $stmt = sqlsrv_query( $conn, "select * from users where id = ?" , array($useridtable), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
     $userrow = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
 
     // Check if the user was inserted
