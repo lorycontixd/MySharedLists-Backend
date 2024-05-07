@@ -131,7 +131,7 @@
             ?
             )";
     $var = array(
-        $row_count,
+        $useridtable,
         $userName,
         $emailAddress,
         $hashed_password,
