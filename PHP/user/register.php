@@ -66,16 +66,16 @@
         return;
     }
 
-    // Count the number of rows in the table
-    $stmt = sqlsrv_query( $conn, "select * from users" , array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET )); 
-    if ($stmt === false) {
+    // Get highest user id
+    $stmt = sqlsrv_query( $conn, "SELECT MAX(id) as maxid FROM users" );
+    if ($stmt === false){
         $errorMsg = sqlsrv_errors()[0]['message'];
         $errorCode = sqlsrv_errors()[0]['code'];
         die("Error: " . $errorCode . " - " . $errorMsg);
         return;
     }
-    $row_count = sqlsrv_num_rows( $stmt );  
-    $useridtable = $row_count;
+    $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+    $useridtable = $row['maxid'] + 1;
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     $verification_code = $database->generate_code('alpha', 8);
